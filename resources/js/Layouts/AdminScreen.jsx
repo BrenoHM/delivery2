@@ -8,8 +8,8 @@ export default function AdminScreen(props) {
       auth={props.auth}
       errors={props.errors}
       header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
-          Ambiente do Admin
+        props.header || <h2 className="text-xl font-semibold leading-tight text-gray-800">
+          Ambiente do Usuário
         </h2>
       }
     >

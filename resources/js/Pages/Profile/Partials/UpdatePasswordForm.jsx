@@ -3,10 +3,12 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
 export default function UpdatePasswordForm({ className }) {
+    const user = usePage().props.auth.user;
+    const {primaryColor, secondaryColor} = user;
     const passwordInput = useRef();
     const currentPasswordInput = useRef();
 
@@ -39,16 +41,16 @@ export default function UpdatePasswordForm({ className }) {
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">Update Password</h2>
+                <h2 className="text-lg font-medium text-gray-900">Atualizar senha</h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Ensure your account is using a long, random password to stay secure.
+                    Certifique-se de que sua conta esteja usando uma senha longa e aleatória para se manter segura.
                 </p>
             </header>
 
             <form onSubmit={updatePassword} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel for="current_password" value="Current Password" />
+                    <InputLabel forInput="current_password" value="Senha atual" />
 
                     <TextInput
                         id="current_password"
@@ -64,7 +66,7 @@ export default function UpdatePasswordForm({ className }) {
                 </div>
 
                 <div>
-                    <InputLabel for="password" value="New Password" />
+                    <InputLabel forInput="password" value="Nova Senha" />
 
                     <TextInput
                         id="password"
@@ -80,7 +82,7 @@ export default function UpdatePasswordForm({ className }) {
                 </div>
 
                 <div>
-                    <InputLabel for="password_confirmation" value="Confirm Password" />
+                    <InputLabel forInput="password_confirmation" value="Confirmação nova Senha" />
 
                     <TextInput
                         id="password_confirmation"
@@ -95,7 +97,7 @@ export default function UpdatePasswordForm({ className }) {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton processing={processing}>Save</PrimaryButton>
+                    <PrimaryButton processing={processing} style={{background: primaryColor ? primaryColor : ''}}>Salvar</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -103,7 +105,7 @@ export default function UpdatePasswordForm({ className }) {
                         leaveTo="opacity-0"
                         className="transition ease-in-out"
                     >
-                        <p className="text-sm text-gray-600">Saved.</p>
+                        <p className="text-sm text-gray-600">Salvo.</p>
                     </Transition>
                 </div>
             </form>

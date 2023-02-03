@@ -8,9 +8,13 @@ import { Transition } from '@headlessui/react';
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className }) {
     const user = usePage().props.auth.user;
 
+    const {primaryColor, secondaryColor} = user;
+
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
         email: user.email,
+        primaryColor: user.primaryColor,
+        secondaryColor: user.secondaryColor
     });
 
     const submit = (e) => {
@@ -22,16 +26,16 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">Profile Information</h2>
+                <h2 className="text-lg font-medium text-gray-900">Informação do Perfil</h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
+                    Atualize as informações de perfil e o endereço de e-mail da sua conta.
                 </p>
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel for="name" value="Name" />
+                    <InputLabel forInput="name" value="Nome" />
 
                     <TextInput
                         id="name"
@@ -47,7 +51,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </div>
 
                 <div>
-                    <InputLabel for="email" value="Email" />
+                    <InputLabel forInput="email" value="Email" />
 
                     <TextInput
                         id="email"
@@ -61,6 +65,38 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                     <InputError className="mt-2" message={errors.email} />
                 </div>
+
+                {user.role == 'client' && (
+                    <div>
+                        <InputLabel forInput="primaryColor" value="Cor Primária" />
+
+                        <TextInput
+                            id="primaryColor"
+                            type="color"
+                            className="mt-1 block w-full"
+                            value={data.primaryColor}
+                            handleChange={(e) => setData('primaryColor', e.target.value)}
+                            autoComplete="primaryColor"
+                        />
+
+                        <InputError className="mt-2" message={errors.primaryColor} />
+                </div>)}
+
+                {user.role == 'client' && (
+                    <div>
+                        <InputLabel forInput="secondaryColor" value="Cor Secundária" />
+
+                        <TextInput
+                            id="secondaryColor"
+                            type="color"
+                            className="mt-1 block w-full"
+                            value={data.secondaryColor}
+                            handleChange={(e) => setData('secondaryColor', e.target.value)}
+                            autoComplete="secondaryColor"
+                        />
+
+                        <InputError className="mt-2" message={errors.secondaryColor} />
+                </div>)}
 
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>
@@ -85,7 +121,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 )}
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton processing={processing}>Save</PrimaryButton>
+                    <PrimaryButton processing={processing} style={{background: primaryColor ? primaryColor : ''}}>Salvar</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -93,7 +129,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         leaveTo="opacity-0"
                         className="transition ease-in-out"
                     >
-                        <p className="text-sm text-gray-600">Saved.</p>
+                        <p className="text-sm text-gray-600">Salvo.</p>
                     </Transition>
                 </div>
             </form>

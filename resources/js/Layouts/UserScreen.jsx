@@ -8,7 +8,7 @@ export default function UserScreen(props) {
       auth={props.auth}
       errors={props.errors}
       header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        props.header || <h2 className="text-xl font-semibold leading-tight text-gray-800">
           Ambiente do Usuário
         </h2>
       }

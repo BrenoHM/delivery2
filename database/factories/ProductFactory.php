@@ -21,7 +21,7 @@ class ProductFactory extends Factory
             'description' => fake()->text(),
             'user_id' => 2,
             'category_id' => 3,
-            'photo' => 'https://files.menudino.com/cardapios/22771/181.jpg',
+            'photo' => env('AWS_URL').'/6qRFOlL34pZuh45bjj2YmDpMmWkrh2rp3d1YxPHe.jpg',
             'price' => 29.99,
         ];
         
