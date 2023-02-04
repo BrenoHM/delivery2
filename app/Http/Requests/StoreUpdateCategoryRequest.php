@@ -43,7 +43,7 @@ class StoreUpdateCategoryRequest extends FormRequest
     public function messages()
     {
         return [
-            'categorie.unique' => 'Essa ategoria já foi cadastrada.'
+            'categorie.unique' => 'Essa categoria já foi cadastrada.'
         ];
     }
 }

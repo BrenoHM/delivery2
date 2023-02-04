@@ -12,7 +12,7 @@ export default function Form({submit, onChangeField, errors, processing, data, a
                         Nome
                     </label>
                     <input
-                        className={`appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${errors.name && 'border-red-500'}`}
+                        className={`appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${errors.categorie && 'border-red-500'}`}
                         id="categorie"
                         type="text"
                         placeholder="Ex. Pizzas"

@@ -209,7 +209,8 @@ return [
         'price' => 'preço',
         'category_id' => 'categoria',
         'photo' => 'foto',
-        'categorie' => 'categoria'
+        'categorie' => 'categoria',
+        'addition' => 'acréscimo'
     ],
 
 ];

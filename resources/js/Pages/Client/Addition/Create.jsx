@@ -1,18 +1,18 @@
 import ClientScreen from '@/Layouts/ClientScreen';
-import Form from '@/Pages/Client/Category/Form';
+import Form from '@/Pages/Client/Addition/Form';
 import { Head, useForm } from '@inertiajs/react';
 
 export default function Create(props) {
 
     const { data, setData, post, processing, errors } = useForm({
-        id: props.category.id,
-        categorie: props.category.categorie,
+        addition: '',
+        price: '',
         user_id: props.auth.user.id
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('category.update', props.category.id));
+        post(route('addition.store'));
     }
 
     const onChangeField = (field, value) => {
@@ -21,17 +21,15 @@ export default function Create(props) {
 
     return (
         <ClientScreen {...props}>
-            <Head title="Editar Categoria" />
-                <h2 className='mb-5'>EDITAR CATEGORIA</h2>
+            <Head title="Cadastrar Acréscimo" />
+                <h2 className='mb-5'>ADICIONAR ACRÉSCIMO</h2>
                 <Form
                     submit={handleSubmit}
                     onChangeField={onChangeField}
                     errors={errors}
                     processing={processing}
-                    data={data}
-                    action={props.action}
                     props={props}
-                />            
+                />
         </ClientScreen>
     )
 }

@@ -46,7 +46,7 @@ export default function ClientScreen(props) {
                               </NavLink>
                             </div>
                             <div className="mb-5">
-                              <NavLink href={route('client.addition')} active={route().current('client.addition')}>
+                              <NavLink href={route('addition.index')} active={route().current('addition.index') || route().current('addition.create') || route().current('addition.edit')}>
                                 <RiAddCircleLine size={20} className="mr-2" /> Acréscimos
                               </NavLink>
                             </div>

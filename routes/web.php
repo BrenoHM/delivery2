@@ -7,7 +7,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\Auth\RedirectAuthenticatedUsersController;
 use App\Http\Controllers\{
     ProductController,
-    CategoryController
+    CategoryController,
+    AdditionController
 };
 
 /*
@@ -59,7 +60,7 @@ Route::middleware('auth')->group(function () {
                 Route::get('/', [ProductController::class, 'index'])->name('client.products');
                 Route::get('/create', [ProductController::class, 'create'])->name('products.create');
                 Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-                Route::post('/create', [ProductController::class, 'store'])->name('products.store');
+                Route::post('/', [ProductController::class, 'store'])->name('products.store');
                 Route::delete('/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
                 Route::post('/{id}', [ProductController::class, 'update'])->name('products.update');
             });
@@ -68,13 +69,22 @@ Route::middleware('auth')->group(function () {
                 Route::get('/', [CategoryController::class, 'index'])->name('category.index');
                 Route::get('/create', [CategoryController::class, 'create'])->name('category.create');
                 Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('category.edit');
-                Route::post('/create', [CategoryController::class, 'store'])->name('category.store');
+                Route::post('/', [CategoryController::class, 'store'])->name('category.store');
                 Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
                 Route::post('/{id}', [CategoryController::class, 'update'])->name('category.update');
             });
 
+            Route::prefix('addition')->group(function () {
+                Route::get('/', [AdditionController::class, 'index'])->name('addition.index');
+                Route::get('/create', [AdditionController::class, 'create'])->name('addition.create');
+                Route::get('/{addition}/edit', [AdditionController::class, 'edit'])->name('addition.edit');
+                Route::post('/', [AdditionController::class, 'store'])->name('addition.store');
+                Route::delete('/{addition}', [AdditionController::class, 'destroy'])->name('addition.destroy');
+                Route::post('/{id}', [AdditionController::class, 'update'])->name('addition.update');
+            });
+
             //Route::get('/category', [CategoryController::class, 'index'])->name('client.category');
-            Route::get('/addition', [ProductController::class, 'index'])->name('client.addition');
+            //Route::get('/addition', [ProductController::class, 'index'])->name('client.addition');
             Route::get('/freight', [ProductController::class, 'index'])->name('client.freight');
         });
         

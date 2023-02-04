@@ -14,8 +14,13 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if( $request->json ) {
-            return Category::where('user_id', Auth::id())
-                    ->paginate($request->per_page);
+            $category = Category::when($request->term, function ($q, $term) { 
+                return $q->whereRaw("UPPER(categorie) LIKE '%".mb_strtoupper($term)."%'");
+            })
+            ->where('user_id', Auth::id())
+            ->paginate($request->per_page);
+
+            return $category;
         }
 
         if( $request->dropdown ) {
