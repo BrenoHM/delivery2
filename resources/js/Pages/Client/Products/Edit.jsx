@@ -20,7 +20,7 @@ export default function Edit(props) {
     }, []);
 
     const loadCategories = async() => {
-        axios.get(route('client.category', {dropdown:true})).then(result => {
+        axios.get(route('category.index', {dropdown:true})).then(result => {
             setCategories(result.data);
         });
     }

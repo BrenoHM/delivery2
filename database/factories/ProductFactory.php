@@ -21,7 +21,7 @@ class ProductFactory extends Factory
             'description' => fake()->text(),
             'user_id' => 2,
             'category_id' => 3,
-            'photo' => env('AWS_URL').'/6qRFOlL34pZuh45bjj2YmDpMmWkrh2rp3d1YxPHe.jpg',
+            'photo' => env('AWS_URL').'/AKe3jdfZj0pN7jWnU5Ll5n6txTY5Si0eDC7Jf8pO.jpg',
             'price' => 29.99,
         ];
         

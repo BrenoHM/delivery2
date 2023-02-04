@@ -5,8 +5,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\RedirectAuthenticatedUsersController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\{
+    ProductController,
+    CategoryController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -58,12 +60,20 @@ Route::middleware('auth')->group(function () {
                 Route::get('/create', [ProductController::class, 'create'])->name('products.create');
                 Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
                 Route::post('/create', [ProductController::class, 'store'])->name('products.store');
-                //Route::delete('/pets/{id}', [PetController::class, 'destroy'])->name('pet.destroy');
                 Route::delete('/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
                 Route::post('/{id}', [ProductController::class, 'update'])->name('products.update');
             });
 
-            Route::get('/category', [CategoryController::class, 'index'])->name('client.category');
+            Route::prefix('category')->group(function () {
+                Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+                Route::get('/create', [CategoryController::class, 'create'])->name('category.create');
+                Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+                Route::post('/create', [CategoryController::class, 'store'])->name('category.store');
+                Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+                Route::post('/{id}', [CategoryController::class, 'update'])->name('category.update');
+            });
+
+            //Route::get('/category', [CategoryController::class, 'index'])->name('client.category');
             Route::get('/addition', [ProductController::class, 'index'])->name('client.addition');
             Route::get('/freight', [ProductController::class, 'index'])->name('client.freight');
         });

@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 export const modalExcluded = (callback) => {
     Swal.fire({
@@ -20,3 +20,10 @@ export const modalExcluded = (callback) => {
         }
     });
 }
+
+export const paginationComponentOptions = {
+  rowsPerPageText: 'Filas por página',
+  rangeSeparatorText: 'de',
+  selectAllRowsItem: true,
+  selectAllRowsItemText: 'Todos',
+};

@@ -208,7 +208,8 @@ return [
         'current_password' => 'senha atual',
         'price' => 'preço',
         'category_id' => 'categoria',
-        'photo' => 'foto'
+        'photo' => 'foto',
+        'categorie' => 'categoria'
     ],
 
 ];

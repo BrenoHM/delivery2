@@ -41,7 +41,7 @@ export default function ClientScreen(props) {
                               </NavLink>
                             </div>
                             <div className="mb-5">
-                              <NavLink href={route('client.category')} active={route().current('client.category')}>
+                              <NavLink href={route('category.index')} active={route().current('category.index') || route().current('category.create') || route().current('category.edit')}>
                                 <RiGridFill size={20} className="mr-2" /> Categorias
                               </NavLink>
                             </div>

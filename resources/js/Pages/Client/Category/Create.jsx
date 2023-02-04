@@ -1,33 +1,17 @@
 import ClientScreen from '@/Layouts/ClientScreen';
-import Form from '@/Pages/Client/Products/Form';
+import Form from '@/Pages/Client/Category/Form';
 import { Head, useForm } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
 
 export default function Create(props) {
 
-    const [categories, setCategories] = useState([]);
-
     const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        description: '',
-        category_id: '',
-        photo: '',
-        price: '',
+        categorie: '',
+        user_id: props.auth.user.id
     });
-
-    useEffect(() => {
-        loadCategories();
-    }, []);
-
-    const loadCategories = async() => {
-        axios.get(route('category.index', {dropdown:true})).then(result => {
-            setCategories(result.data);
-        });
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('products.store'));
+        post(route('category.store'));
     }
 
     const onChangeField = (field, value) => {
@@ -36,10 +20,9 @@ export default function Create(props) {
 
     return (
         <ClientScreen {...props}>
-            <Head title="Cadastrar Produto" />
-                <h2 className='mb-5'>ADICIONAR PRODUTO</h2>
+            <Head title="Cadastrar Categoria" />
+                <h2 className='mb-5'>ADICIONAR CATEGORIA</h2>
                 <Form
-                    categories={categories}
                     submit={handleSubmit}
                     onChangeField={onChangeField}
                     errors={errors}
