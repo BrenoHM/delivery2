@@ -8,7 +8,8 @@ use App\Http\Controllers\Auth\RedirectAuthenticatedUsersController;
 use App\Http\Controllers\{
     ProductController,
     CategoryController,
-    AdditionController
+    AdditionController,
+    FreightController
 };
 
 /*
@@ -83,9 +84,14 @@ Route::middleware('auth')->group(function () {
                 Route::post('/{id}', [AdditionController::class, 'update'])->name('addition.update');
             });
 
-            //Route::get('/category', [CategoryController::class, 'index'])->name('client.category');
-            //Route::get('/addition', [ProductController::class, 'index'])->name('client.addition');
-            Route::get('/freight', [ProductController::class, 'index'])->name('client.freight');
+            Route::prefix('freight')->group(function () {
+                Route::get('/', [FreightController::class, 'index'])->name('freight.index');
+                Route::get('/create', [FreightController::class, 'create'])->name('freight.create');
+                Route::get('/{freight}/edit', [FreightController::class, 'edit'])->name('freight.edit');
+                Route::post('/', [FreightController::class, 'store'])->name('freight.store');
+                Route::delete('/{freight}', [FreightController::class, 'destroy'])->name('freight.destroy');
+                Route::put('/{freight}', [FreightController::class, 'update'])->name('freight.update');
+            });
         });
         
     });

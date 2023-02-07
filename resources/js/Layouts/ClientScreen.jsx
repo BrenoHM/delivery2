@@ -51,7 +51,7 @@ export default function ClientScreen(props) {
                               </NavLink>
                             </div>
                             <div>
-                              <NavLink href={route('client.freight')} active={route().current('client.freight')}>
+                              <NavLink href={route('freight.index')} active={route().current('freight.index') || route().current('freight.create') || route().current('freight.edit') }>
                                 <RiTruckLine size={20} className="mr-2" /> Frete
                               </NavLink>
                             </div>

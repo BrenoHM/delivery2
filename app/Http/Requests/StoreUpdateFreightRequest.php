@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUpdateAdditionRequest extends FormRequest
+class StoreUpdateFreightRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,15 @@ class StoreUpdateAdditionRequest extends FormRequest
     public function rules()
     {
         return [
-            'addition' => 'required|unique:additions,addition,' . $this->id . ',id,user_id,' . $this->user_id . ',deleted_at,NULL',
+            'neighborhood' => 'required|unique:freights,neighborhood,' . $this->id . ',id,user_id,' . $this->user_id . ',city,' . $this->city . ',state,' . $this->state . ',deleted_at,NULL',
             'price' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'neighborhood.unique' => 'Este bairro já foi cadastrado.'
         ];
     }
 }

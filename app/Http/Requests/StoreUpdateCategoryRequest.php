@@ -34,10 +34,9 @@ class StoreUpdateCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'categorie' => 'required|unique:categories,categorie,' . $this->id . ',id,user_id,' . $this->user_id
+            'categorie' => 'required|unique:categories,categorie,' . $this->id . ',id,user_id,' . $this->user_id . ',deleted_at,NULL'
         ];
 
-        //'column_1' => 'required|unique:TableName,column_1,' . $this->id . ',id,colum_2,' . $this->column_2
     }
 
     public function messages()
