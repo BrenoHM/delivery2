@@ -23,6 +23,7 @@ return new class extends Migration
             $table->float('price');
             $table->timestamps();
             $table->softDeletes();
+            $table->comment('Tabela de produtos.');
         });
     }
 

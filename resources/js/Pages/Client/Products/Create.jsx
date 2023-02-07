@@ -13,6 +13,7 @@ export default function Create(props) {
         category_id: '',
         photo: '',
         price: '',
+        additions: []
     });
 
     useEffect(() => {
@@ -31,7 +32,19 @@ export default function Create(props) {
     }
 
     const onChangeField = (field, value) => {
-        setData(field, value);
+        if(field == 'additions'){
+            let additions = data[field];
+            if( value.checked ) {
+                additions.push(value.value)
+                setData(field, additions);
+            }else{
+                //retira
+                additions = additions.filter(addition => addition != value.value);
+                setData(field, additions);
+            }
+        }else{
+            setData(field, value);
+        }
     }
 
     return (

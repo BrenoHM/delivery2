@@ -4,6 +4,10 @@ import InputMask from 'react-input-mask';
 
 export default function Form({categories, submit, onChangeField, errors, processing, data, action, props}) {
     const {primaryColor, secondaryColor} = props.auth.user;
+
+    const deschecked = i => {
+        props.additions[i].checked = !props.additions[i].checked;
+    }
     
     return(
         <form className="w-full max-w-2xl" onSubmit={submit} encType="multipart/form-data">
@@ -84,6 +88,28 @@ export default function Form({categories, submit, onChangeField, errors, process
                         step=".01"
                     />
                     {errors.price && <p className="text-red-500 text-xs italic">{errors.price}</p>}
+                </div>
+            </div>
+            <div className="flex flex-wrap -mx-3 mb-6">
+                <div className="w-full px-3 mb-6 md:mb-0">
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                        Acréscimos
+                    </label>
+                    {props.additions && props.additions.map((addition, i) => (
+                        <label className='block' key={addition.id}>
+                            <input
+                                className="mr-2"
+                                type="checkbox"
+                                onChange={e => {
+                                    onChangeField('additions', e.target)
+                                    deschecked(i)
+                                }}
+                                value={addition.id}
+                                checked={addition.checked} />
+                                {addition.addition}
+                        </label>
+                    ))}
+                    
                 </div>
             </div>
             <div className="text-center">

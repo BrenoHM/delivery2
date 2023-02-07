@@ -13,6 +13,7 @@ export default function Edit(props) {
         category_id: props.product.category_id,
         photo: '',
         price: props.product.price,
+        additions: props.idsAdditions
     });
 
     useEffect(() => {
@@ -32,7 +33,19 @@ export default function Edit(props) {
     }
 
     const onChangeField = (field, value) => {
-        setData(field, value);
+        if(field == 'additions'){
+            let additions = data[field];
+            if( value.checked ) {
+                additions.push(value.value)
+                setData(field, additions);
+            }else{
+                //retira
+                additions = additions.filter(addition => addition != value.value);
+                setData(field, additions);
+            }
+        }else{
+            setData(field, value);
+        }
     }
 
     return (

@@ -89,6 +89,8 @@ Route::middleware('auth')->group(function () {
         });
         
     });
+
+    Route::get('tb', [ProductController::class, 'tb']);
 });
 
 require __DIR__.'/auth.php';

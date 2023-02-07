@@ -15,4 +15,8 @@ class Addition extends Model
         'addition',
         'price'
     ];
+
+    public function products(){
+        return $this->belongsToMany(Product::class);
+    }
 }

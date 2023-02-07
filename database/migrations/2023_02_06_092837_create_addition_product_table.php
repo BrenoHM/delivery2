@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('additions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('addition');
-            $table->float('price');
-            $table->timestamps();
-            $table->softDeletes();
-            $table->comment('Tabela de acréscimos.');
+        Schema::create('addition_product', function (Blueprint $table) {
+            //$table->id();
+            $table->foreignId('addition_id')->constrained();
+            $table->foreignId('product_id')->constrained();
+            //$table->timestamps();
+            $table->comment('Relação de Produtos com acréscimos.');
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('additions');
+        Schema::dropIfExists('addition_product');
     }
 };

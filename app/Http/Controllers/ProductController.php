@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUpdateProductRequest;
+use App\Models\Addition;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -36,7 +37,11 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
-        return Inertia::render('Client/Products/Create', []);
+        $additions = Addition::where('user_id', Auth::id())->get();
+
+        return Inertia::render('Client/Products/Create', [
+            'additions' => $additions
+        ]);
     }
 
     public function store(StoreUpdateProductRequest $request)
@@ -54,7 +59,13 @@ class ProductController extends Controller
             }
         }
 
-        Product::create($data);
+        $product = Product::create($data);
+
+        if( $product ) {
+            if( $request->additions ) {
+                $product->additions()->attach($request->additions);
+            }
+        }
 
         return Redirect::route('client.products')->with('message', 'Produto Cadastrado com sucesso!');
 
@@ -68,20 +79,48 @@ class ProductController extends Controller
 
         }
 
+        $additions = Addition::where('user_id', Auth::id())->get();
+        $add = [];
+        //$ids = $product->additions->pluck('id');
+        $ids = [];
+        if( $product->additions ){
+            foreach($product->additions as $id) {
+                $ids[] = $id->id;
+            }
+        }
+        //dd($ids);
+
+        if( $additions ) {
+            foreach($additions as $addition) {
+                $arrayAdition = $addition->toArray();
+                //dd($arrayAdition);
+                $arrayAdition['checked'] = in_array($arrayAdition['id'], $ids) ? true : false;
+                array_push($add, $arrayAdition);
+            }
+        }
+
+        //dd($add);
+
+        //dd($product->additions->pluck('id'));
+
         return Inertia::render('Client/Products/Edit', [
             'product' => $product,
+            'additions' => $add,
+            'idsAdditions' => $ids,
             'action' => 'Editar'
         ]);
     }
 
     public function update(StoreUpdateProductRequest $request, $id)
     {
+
+        //dd($request->all());
         
         $product = Product::where('id', $id);
         
         $builderProduct = $product->first();
 
-        $data = $request->except('photo');  
+        $data = $request->except(['photo', 'additions']);
 
         if( $request->photo ){
             $path = Storage::put('', $request->photo, 'public');
@@ -95,7 +134,12 @@ class ProductController extends Controller
             }
         }
 
-        $product->update($data);
+        if( $product->update($data) ) {
+            //if( $request->additions ) {
+            //    dd('ffjk');
+                $builderProduct->additions()->sync($request->additions);
+            //}
+        }
 
         return Redirect::route('client.products')->with('message', 'Produto Atualizado com sucesso!');
 
@@ -108,5 +152,18 @@ class ProductController extends Controller
         $product->delete();
         return 'ok';
         //return Redirect::route('client.products')->with('message', 'Produto inativado com sucesso!');
+    }
+
+    public function tb()
+    {
+        $product = Product::find(1);
+        //dd($product);
+        //$product->additions()->attach(array(1,2));
+        $product->additions()->sync(array(3,4));
+
+        $product2 = Product::find(2);
+
+        $product2->additions()->sync(array(1,2));
+        dd('ok');
     }
 }
