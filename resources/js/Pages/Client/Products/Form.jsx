@@ -1,6 +1,5 @@
 import PrimaryButton from '@/Components/PrimaryButton';
 import { Link } from '@inertiajs/react';
-import InputMask from 'react-input-mask';
 
 export default function Form({categories, submit, onChangeField, errors, processing, data, action, props}) {
     const {primaryColor, secondaryColor} = props.auth.user;

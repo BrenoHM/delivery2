@@ -2,6 +2,8 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { Link } from '@inertiajs/react';
 import cep from 'cep-promise';
 import { useState } from 'react';
+import Swal from 'sweetalert2';
+import InputMask from 'react-input-mask';
 
 export default function Form({submit, onChangeField, onChangeFieldAll, errors, processing, data, action, props}) {
     const {primaryColor, secondaryColor} = props.auth.user;
@@ -22,7 +24,15 @@ export default function Form({submit, onChangeField, onChangeFieldAll, errors, p
                     });
                     
                 })
-                .catch(console.log)
+                .catch(err => {
+                    setCep('');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: err.message,
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                    })
+                })
         }
     }
     
@@ -41,7 +51,9 @@ export default function Form({submit, onChangeField, onChangeFieldAll, errors, p
                                 href='https://buscacepinter.correios.com.br/app/logradouro_bairro/index.php'>Não sei o cep do bairro desejado
                             </a>
                         </label>
-                        <input
+                        <InputMask
+                            mask="99999999"
+                            maskChar={null}
                             className={`appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white ${errors.addition && 'border-red-500'}`}
                             id="addition"
                             type="text"
@@ -49,7 +61,6 @@ export default function Form({submit, onChangeField, onChangeFieldAll, errors, p
                             //onChange={e => onChangeField('addition', e.target.value)}
                             onChange={e => searchCep(e.target.value)}
                             value={cepField}
-                            maxLength={8}
                         />
                     </div>
                     </div>
