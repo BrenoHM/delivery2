@@ -5,14 +5,16 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { slugify } from '@/helper';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, transform, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
-        role: '', // make sure this is present
+        role: 'user', // make sure this is present
         password: '',
         password_confirmation: '',
+        slugTenant: '',
     });
 
     useEffect(() => {
@@ -25,7 +27,13 @@ export default function Register() {
         setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
     };
 
-    const submit = (e) => {
+    //before send data
+    transform((data) => ({
+        ...data,
+        slugTenant: data.role == 'client' ? slugify(data.name) : '',
+    }));
+
+    const submit = async (e) => {
         e.preventDefault();
 
         post(route('register'));
@@ -51,6 +59,7 @@ export default function Register() {
                     />
 
                     <InputError message={errors.name} className="mt-2" />
+                    <InputError message={errors.slugTenant} className="mt-2" />
                 </div>
 
                 <div className="mt-4">
@@ -83,6 +92,8 @@ export default function Register() {
                         <option value="admin">Admin</option>
                         <option value="client">Client</option>
                     </select>
+
+                    <InputError message={errors.role} className="mt-2" />
                 </div>
 
                 <div className="mt-4">

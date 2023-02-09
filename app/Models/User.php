@@ -25,6 +25,7 @@ class User extends Authenticatable
         'primaryColor',
         'secondaryColor',
         'password',
+        'slugTenant'
     ];
 
     /**

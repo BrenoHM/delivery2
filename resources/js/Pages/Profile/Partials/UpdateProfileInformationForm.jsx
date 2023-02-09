@@ -4,18 +4,27 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import { slugify } from '@/helper';
 
-export default function UpdateProfileInformation({ mustVerifyEmail, status, className }) {
+export default function UpdateProfileInformation({ mustVerifyEmail, status, appUrl, className }) {
     const user = usePage().props.auth.user;
 
     const {primaryColor, secondaryColor} = user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, transform, patch, errors, processing, recentlySuccessful } = useForm({
+        id: user.id,
         name: user.name,
         email: user.email,
-        primaryColor: user.primaryColor,
-        secondaryColor: user.secondaryColor
+        primaryColor: user.primaryColor ?? "",
+        secondaryColor: user.secondaryColor ?? "",
+        slugTenant: user.slugTenant,
     });
+
+    //before send data
+    transform((data) => ({
+        ...data,
+        slugTenant: user.role == 'client' ? slugify(data.name) : '',
+    }));
 
     const submit = (e) => {
         e.preventDefault();
@@ -46,8 +55,12 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         isFocused
                         autoComplete="name"
                     />
+                    {user.role == 'client' && (<i><small>Url do seu site: <strong>{appUrl + '/' + user.slugTenant}</strong></small></i>)}
 
                     <InputError className="mt-2" message={errors.name} />
+
+                    <InputError className="mt-2" message={errors.slugTenant} />
+
                 </div>
 
                 <div>

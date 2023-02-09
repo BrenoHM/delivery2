@@ -1,6 +1,7 @@
 import React from "react";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import NavLink from "@/Components/NavLink";
+import { usePage } from '@inertiajs/react';
 import { 
   RiTruckLine,
   RiDashboardLine,
@@ -11,8 +12,9 @@ import {
 
 export default function ClientScreen(props) {
   
+  const {defaultPrimaryColor} = usePage().props
   const {primaryColor, secondaryColor} = props.auth.user;
-  
+    
   return (
     <Authenticated
       auth={props.auth}
@@ -29,7 +31,7 @@ export default function ClientScreen(props) {
                 <div className="sm:pr-6 md:pl-6 md:pr-0">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 bg-white border-b border-gray-200">
-                            <h2 className="mb-3 text-white p-3 font-bold" style={{background: primaryColor ? primaryColor : props.defaultPrimaryColor}}>Menu Cliente</h2>
+                            <h2 className="mb-3 text-white p-3 font-bold" style={{background: primaryColor ? primaryColor : defaultPrimaryColor}}>Menu Cliente</h2>
                             <div className="mb-5">
                               <NavLink href={route('clientDashboard')} active={route().current('clientDashboard')}>
                                 <RiDashboardLine size={20} className="mr-2" /> Dashboard

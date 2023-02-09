@@ -19,7 +19,15 @@ class ProfileUpdateRequest extends FormRequest
             'name' => ['string', 'max:255'],
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
             'primaryColor' => ['string', 'nullable'],
-            'secondaryColor' => ['string', 'nullable']
+            'secondaryColor' => ['string', 'nullable'],
+            'slugTenant' => 'nullable|unique:users,slugTenant,'.$this->id.',id,deleted_at,NULL',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'slugTenant.unique' => 'Este nome já esta sendo utilizado'
         ];
     }
 }
