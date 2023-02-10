@@ -121,6 +121,7 @@ export default function Index(props) {
 
             <DataTable
                 title="Acréscimos Cadastrados"
+                noDataComponent="Não há registros para exibir"
                 columns={columns}
                 data={filteredItems}
                 progressPending={loading}

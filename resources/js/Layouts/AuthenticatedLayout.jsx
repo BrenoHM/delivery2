@@ -3,21 +3,23 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function Authenticated({ auth, header, children }) {
+
+    const {app_url, defaultPrimaryColor} = usePage().props
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav style={{background: auth.user.primaryColor ? auth.user.primaryColor : ''}} className="bg-white border-b border-gray-100">
+            <nav style={{background: auth.user.primaryColor ? auth.user.primaryColor : defaultPrimaryColor}} className="bg-white border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
-                        <div className="flex">
+                        <div className="flex items-center">
                             <div className="shrink-0 flex items-center">
-                                <Link href="/">
+                                {/* <Link href="/">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
+                                </Link> */}
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -55,6 +57,15 @@ export default function Authenticated({ auth, header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
+                                        {auth.user.role == 'client' && (
+                                            <a
+                                                className="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
+                                                target="_blank"
+                                                href={`${app_url}/${auth.user.slugTenant}`}>
+                                                Ver meu site
+                                            </a>
+                                        )}
+                                        
                                         <Dropdown.Link href={route('profile.edit')}>Perfil</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Sair

@@ -3,7 +3,7 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import DataTable from 'react-data-table-component';
 import { BiTrash, BiPencil } from "react-icons/bi";
 import { useState, useEffect, useMemo } from 'react';
-import {modalExcluded, paginationComponentOptions} from '@/helper';
+import { modalExcluded, paginationComponentOptions } from '@/helper';
 import FilterComponent from '@/Components/FilterComponent';
 
 export default function Index(props) {
@@ -129,6 +129,7 @@ export default function Index(props) {
 
             <DataTable
                 title="Fretes Cadastrados"
+                noDataComponent="Não há registros para exibir"
                 columns={columns}
                 data={filteredItems}
                 progressPending={loading}

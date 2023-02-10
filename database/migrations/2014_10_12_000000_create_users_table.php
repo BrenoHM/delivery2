@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('role');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('primaryColor')->nullable();
             $table->string('secondaryColor')->nullable();
             $table->timestamp('email_verified_at')->nullable();

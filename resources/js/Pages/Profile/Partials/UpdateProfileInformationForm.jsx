@@ -6,8 +6,9 @@ import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import { slugify } from '@/helper';
 
-export default function UpdateProfileInformation({ mustVerifyEmail, status, appUrl, className }) {
+export default function UpdateProfileInformation({ mustVerifyEmail, status, className }) {
     const user = usePage().props.auth.user;
+    const {app_url} = usePage().props
 
     const {primaryColor, secondaryColor} = user;
 
@@ -55,7 +56,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, appU
                         isFocused
                         autoComplete="name"
                     />
-                    {user.role == 'client' && (<i><small>Url do seu site: <strong>{appUrl + '/' + user.slugTenant}</strong></small></i>)}
+                    {user.role == 'client' && (<i><small>Url do seu site: <strong>{app_url + '/' + user.slugTenant}</strong></small></i>)}
 
                     <InputError className="mt-2" message={errors.name} />
 

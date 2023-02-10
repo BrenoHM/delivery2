@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
                 'primaryColor' => null,
                 'secondaryColor' => null,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'slugTenant' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -34,6 +35,7 @@ class UserSeeder extends Seeder
                 'primaryColor' => '#660066',
                 'secondaryColor' => '#FFCD01',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'slugTenant' => 'client',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -44,6 +46,7 @@ class UserSeeder extends Seeder
                 'primaryColor' => null,
                 'secondaryColor' => null,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'slugTenant' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -54,6 +57,7 @@ class UserSeeder extends Seeder
                 'primaryColor' => '#660053',
                 'secondaryColor' => '#e1ff00',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'slugTenant' => 'client1',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],

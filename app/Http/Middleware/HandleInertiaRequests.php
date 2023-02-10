@@ -43,7 +43,8 @@ class HandleInertiaRequests extends Middleware
                 ]);
             },
             'csrf' => csrf_token(),
-            'defaultPrimaryColor' => '#555555'
+            //'defaultPrimaryColor' => '#555555',
+            'app_url' => config('app.url')
         ]);
     }
 }
