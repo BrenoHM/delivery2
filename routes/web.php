@@ -104,4 +104,10 @@ Route::domain(env('APP_URL'))->group(function () {
 });
 
 //Rotas para tenants ficarão separadas
-Route::domain('{tenant}.' . env('APP_URL'))->group(base_path('routes/tenant.php'));
+Route::domain('{tenant}.' . env('APP_URL'))
+    ->middleware(['getTennant'])
+    ->group(base_path('routes/tenant.php'));
+
+
+// Route::middleware(['getTennant'])->group(function () { ... });
+

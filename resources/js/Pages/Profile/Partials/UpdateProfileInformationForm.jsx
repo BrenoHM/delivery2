@@ -56,7 +56,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         isFocused
                         autoComplete="name"
                     />
-                    {user.role == 'client' && (<i><small>Url do seu site: <strong>{app_url + '/' + user.slugTenant}</strong></small></i>)}
+                    {user.role == 'client' && (<i><small>Url do seu site: <strong>{`http://${user.slugTenant}.${app_url}`}</strong></small></i>)}
 
                     <InputError className="mt-2" message={errors.name} />
 
