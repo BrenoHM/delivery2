@@ -15,6 +15,7 @@ export default function Register() {
         password: '',
         password_confirmation: '',
         slugTenant: '',
+        domain: ''
     });
 
     useEffect(() => {
@@ -31,6 +32,7 @@ export default function Register() {
     transform((data) => ({
         ...data,
         slugTenant: data.role == 'client' ? slugify(data.name) : '',
+        domain: data.role == 'client' ? slugify(data.name) : '',
     }));
 
     const submit = async (e) => {
@@ -60,6 +62,7 @@ export default function Register() {
 
                     <InputError message={errors.name} className="mt-2" />
                     <InputError message={errors.slugTenant} className="mt-2" />
+                    <InputError message={errors.domain} className="mt-2" />
                 </div>
 
                 <div className="mt-4">

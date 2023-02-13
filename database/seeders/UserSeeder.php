@@ -21,10 +21,7 @@ class UserSeeder extends Seeder
                 'name' => 'Admin',
                 'role' => 'admin',
                 'email' => 'admin@example.com',
-                'primaryColor' => null,
-                'secondaryColor' => null,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'slugTenant' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -32,10 +29,7 @@ class UserSeeder extends Seeder
                 'name' => 'Client',
                 'role' => 'client',
                 'email' => 'client@example.com',
-                'primaryColor' => '#660066',
-                'secondaryColor' => '#FFCD01',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'slugTenant' => 'client',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -43,10 +37,7 @@ class UserSeeder extends Seeder
                 'name' => 'User',
                 'role' => 'user',
                 'email' => 'user@example.com',
-                'primaryColor' => null,
-                'secondaryColor' => null,
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'slugTenant' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -54,10 +45,7 @@ class UserSeeder extends Seeder
                 'name' => 'Client1',
                 'role' => 'client',
                 'email' => 'client1@example.com',
-                'primaryColor' => '#660053',
-                'secondaryColor' => '#e1ff00',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'slugTenant' => 'client1',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],

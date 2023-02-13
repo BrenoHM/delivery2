@@ -2,7 +2,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { Link } from '@inertiajs/react';
 
 export default function Form({categories, submit, onChangeField, errors, processing, data, action, props}) {
-    const {primaryColor, secondaryColor} = props.auth.user;
+    const {primaryColor, secondaryColor} = props.auth.user.tenant;
 
     const deschecked = i => {
         props.additions[i].checked = !props.additions[i].checked;

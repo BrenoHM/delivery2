@@ -8,23 +8,26 @@ import { slugify } from '@/helper';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className }) {
     const user = usePage().props.auth.user;
-    const {app_url} = usePage().props
+    const {app_url} = usePage().props;
 
-    const {primaryColor, secondaryColor} = user;
+    if( user.tenant ){
+        const {primaryColor, secondaryColor} = user.tenant;
+    }
 
     const { data, setData, transform, patch, errors, processing, recentlySuccessful } = useForm({
         id: user.id,
         name: user.name,
         email: user.email,
-        primaryColor: user.primaryColor ?? "",
-        secondaryColor: user.secondaryColor ?? "",
-        slugTenant: user.slugTenant,
+        primaryColor: user.tenant?.primaryColor ?? "",
+        secondaryColor: user.tenant?.secondaryColor ?? "",
+        domain: user.tenant?.domain,
+        tenant_id: user.tenant?.id ?? ""
     });
 
     //before send data
     transform((data) => ({
         ...data,
-        slugTenant: user.role == 'client' ? slugify(data.name) : '',
+        domain: user.role == 'client' ? slugify(data.name) : '',
     }));
 
     const submit = (e) => {
@@ -56,11 +59,11 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         isFocused
                         autoComplete="name"
                     />
-                    {user.role == 'client' && (<i><small>Url do seu site: <strong>{`http://${user.slugTenant}.${app_url}`}</strong></small></i>)}
+                    {user.role == 'client' && (<i><small>Url do seu site: <strong>{`http://${user.tenant.domain}.${app_url}`}</strong></small></i>)}
 
                     <InputError className="mt-2" message={errors.name} />
 
-                    <InputError className="mt-2" message={errors.slugTenant} />
+                    <InputError className="mt-2" message={errors.domain} />
 
                 </div>
 
@@ -135,7 +138,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 )}
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton processing={processing} style={{background: primaryColor ? primaryColor : ''}}>Salvar</PrimaryButton>
+                    <PrimaryButton processing={processing} style={{background: user.tenant?.primaryColor ? user.tenant.primaryColor : ''}}>Salvar</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}

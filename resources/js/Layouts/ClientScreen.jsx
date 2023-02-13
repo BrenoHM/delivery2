@@ -13,7 +13,7 @@ import {
 export default function ClientScreen(props) {
   
   const {defaultPrimaryColor} = usePage().props
-  const {primaryColor, secondaryColor} = props.auth.user;
+  const {primaryColor, secondaryColor} = props.auth.user.tenant;
     
   return (
     <Authenticated

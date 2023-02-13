@@ -2,7 +2,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { Link } from '@inertiajs/react';
 
 export default function Form({submit, onChangeField, errors, processing, data, action, props}) {
-    const {primaryColor, secondaryColor} = props.auth.user;
+    const {primaryColor, secondaryColor} = props.auth.user.tenant;
     
     return(
         <form className="w-full max-w-2xl" onSubmit={submit} encType="multipart/form-data">

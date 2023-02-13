@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tenant;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -37,7 +38,8 @@ class RegisteredUserController extends Controller
             'email'=>'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
             'role' => 'required|string',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'slugTenant' => 'nullable|unique:users,slugTenant,null,id,deleted_at,NULL',
+            //'slugTenant' => 'nullable|unique:users,slugTenant,null,id,deleted_at,NULL',
+            'domain' => 'nullable|unique:tenants,domain,null,id,deleted_at,NULL',
         ]);
 
         $user = User::create([
@@ -45,8 +47,16 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password),
-            'slugTenant' => $request->slugTenant
+            //'slugTenant' => $request->slugTenant
         ]);
+
+        if( $request->role == 'client' ) {
+            //insert tenant
+            $tenant = Tenant::create([
+                'domain' => $request->domain,
+            ]);
+            $user->update(['tenant_id' => $tenant->id]);
+        }
 
         event(new Registered($user));
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
+use App\Models\Tenant;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -23,9 +23,10 @@ class GetTennant
         $current_url = explode('.', $current_url);
         $subdomain = array_shift($current_url);
         
-        $tenant = User::where('slugTenant', $subdomain)->first();
+        $tenant = Tenant::where('domain', $subdomain)->first();
         if ($tenant) {
             config(['tenant.id' => $tenant->id]);
+            $request->session()->put('tenant', $tenant); //store it in session
             //dd(config('tenant.id'));
         }
         else {

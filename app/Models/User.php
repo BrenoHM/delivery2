@@ -25,7 +25,8 @@ class User extends Authenticatable
         'primaryColor',
         'secondaryColor',
         'password',
-        'slugTenant'
+        'slugTenant',
+        'tenant_id'
     ];
 
     /**
@@ -46,4 +47,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $with = ['tenant'];
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class);
+    }
 }

@@ -12,7 +12,7 @@ export default function Authenticated({ auth, header, children }) {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav style={{background: auth.user.primaryColor ? auth.user.primaryColor : defaultPrimaryColor}} className="bg-white border-b border-gray-100">
+            <nav style={{background: auth.user.tenant?.primaryColor ? auth.user.tenant?.primaryColor : defaultPrimaryColor}} className="bg-white border-b border-gray-100">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center">
@@ -61,7 +61,7 @@ export default function Authenticated({ auth, header, children }) {
                                             <a
                                                 className="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out"
                                                 target="_blank"
-                                                href={`http://${auth.user.slugTenant}.${app_url}`}>
+                                                href={`http://${auth.user.tenant.domain}.${app_url}`}>
                                                 Ver meu site
                                             </a>
                                         )}

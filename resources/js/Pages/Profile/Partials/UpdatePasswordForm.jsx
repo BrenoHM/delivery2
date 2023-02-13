@@ -8,7 +8,9 @@ import { Transition } from '@headlessui/react';
 
 export default function UpdatePasswordForm({ className }) {
     const user = usePage().props.auth.user;
-    const {primaryColor, secondaryColor} = user;
+    if( user.tenant ){
+        const {primaryColor, secondaryColor} = user.tenant;
+    }
     const passwordInput = useRef();
     const currentPasswordInput = useRef();
 
@@ -97,7 +99,7 @@ export default function UpdatePasswordForm({ className }) {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton processing={processing} style={{background: primaryColor ? primaryColor : ''}}>Salvar</PrimaryButton>
+                    <PrimaryButton processing={processing} style={{background: user.tenant?.primaryColor ? user.tenant.primaryColor : ''}}>Salvar</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}

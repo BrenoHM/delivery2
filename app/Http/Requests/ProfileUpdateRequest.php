@@ -20,14 +20,15 @@ class ProfileUpdateRequest extends FormRequest
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)->whereNull('deleted_at')],
             'primaryColor' => ['string', 'nullable'],
             'secondaryColor' => ['string', 'nullable'],
-            'slugTenant' => 'nullable|unique:users,slugTenant,'.$this->id.',id,deleted_at,NULL',
+            //'slugTenant' => 'nullable|unique:users,slugTenant,'.$this->id.',id,deleted_at,NULL',
+            'domain' => 'nullable|unique:tenants,domain,'.$this->tenant_id.',id,deleted_at,NULL',
         ];
     }
 
     public function messages()
     {
         return [
-            'slugTenant.unique' => 'Este nome já esta sendo utilizado'
+            'domain.unique' => 'Este nome já esta sendo utilizado'
         ];
     }
 }

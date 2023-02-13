@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import InputMask from 'react-input-mask';
 
 export default function Form({submit, onChangeField, onChangeFieldAll, errors, processing, data, action, props}) {
-    const {primaryColor, secondaryColor} = props.auth.user;
+    const {primaryColor, secondaryColor} = props.auth.user.tenant;
     const [cepField, setCep] = useState('');
     const [neighborhood, setNeighborhood] = useState('Digite um cep para busca...');
 

@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('role');
             $table->string('email');
-            $table->string('primaryColor')->nullable();
-            $table->string('secondaryColor')->nullable();
+            // $table->string('primaryColor')->nullable();
+            // $table->string('secondaryColor')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('slugTenant')->nullable();
+            //$table->string('slugTenant')->nullable();
+            $table->foreignId('tenant_id')->nullable()->constrained();
             $table->timestamps();
             $table->softDeletes();
         });

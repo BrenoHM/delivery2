@@ -9,7 +9,7 @@ import FilterComponent from '@/Components/FilterComponent';
 export default function Index(props) {
 
     const {flash} = usePage().props
-    const {primaryColor, secondaryColor} = props.auth.user;
+    const {primaryColor, secondaryColor} = props.auth.user.tenant;
     const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [totalRows, setTotalRows] = useState(0);

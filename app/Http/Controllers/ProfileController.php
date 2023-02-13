@@ -29,14 +29,25 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        //dd($request->all());
-        $request->user()->fill($request->validated());
+        $request->user()->fill([
+            'name' => $request->name,
+            'email' => $request->email
+        ]);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
+
+        if($request->user()->role == 'client') {
+            //update in tenant
+            $request->user()->tenant()->update([
+                'primaryColor' => $request->primaryColor,
+                'secondaryColor' => $request->secondaryColor,
+                'domain' => $request->domain,
+            ]);
+        }
 
         return Redirect::route('profile.edit');
     }
