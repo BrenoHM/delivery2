@@ -32,22 +32,27 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validations = [
             'name' => 'required|string|max:255',
-            //'email' => 'required|string|email|max:255|unique:'.User::class.',deleted_at,NULL',
             'email'=>'required|string|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
             'role' => 'required|string',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            //'slugTenant' => 'nullable|unique:users,slugTenant,null,id,deleted_at,NULL',
-            'domain' => 'nullable|unique:tenants,domain,null,id,deleted_at,NULL',
-        ]);
+        ];
+
+        $messages = [];
+
+        if( $request->role == 'client' ) {
+            $validations['domain'] = 'required|unique:tenants,domain,null,id,deleted_at,NULL';
+            $messages['domain.unique'] = 'Este nome já esta sendo utilizado';
+        }
+
+        $request->validate($validations, $messages);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password),
-            //'slugTenant' => $request->slugTenant
         ]);
 
         if( $request->role == 'client' ) {

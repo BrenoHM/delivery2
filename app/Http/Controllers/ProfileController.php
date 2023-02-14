@@ -29,6 +29,8 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
+        //dd($request->all());
         $request->user()->fill([
             'name' => $request->name,
             'email' => $request->email
@@ -43,9 +45,15 @@ class ProfileController extends Controller
         if($request->user()->role == 'client') {
             //update in tenant
             $request->user()->tenant()->update([
+                'domain' => $request->domain,
                 'primaryColor' => $request->primaryColor,
                 'secondaryColor' => $request->secondaryColor,
-                'domain' => $request->domain,
+                'zip_code' => $request->zip_code,
+                'street' => $request->street,
+                'number' => $request->number,
+                'neighborhood' => $request->neighborhood,
+                'state' => $request->state,
+                'city' => $request->city,
             ]);
         }
 
@@ -66,6 +74,7 @@ class ProfileController extends Controller
         Auth::logout();
 
         $user->delete();
+        $user->tenant()->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -14,7 +14,6 @@ export default function Register() {
         role: 'user', // make sure this is present
         password: '',
         password_confirmation: '',
-        slugTenant: '',
         domain: ''
     });
 
@@ -31,7 +30,6 @@ export default function Register() {
     //before send data
     transform((data) => ({
         ...data,
-        slugTenant: data.role == 'client' ? slugify(data.name) : '',
         domain: data.role == 'client' ? slugify(data.name) : '',
     }));
 
@@ -61,7 +59,6 @@ export default function Register() {
                     />
 
                     <InputError message={errors.name} className="mt-2" />
-                    <InputError message={errors.slugTenant} className="mt-2" />
                     <InputError message={errors.domain} className="mt-2" />
                 </div>
 

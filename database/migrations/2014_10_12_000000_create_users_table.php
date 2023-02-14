@@ -16,14 +16,11 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('role');
+            $table->enum('role', ['admin', 'user', 'client']);
             $table->string('email');
-            // $table->string('primaryColor')->nullable();
-            // $table->string('secondaryColor')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            //$table->string('slugTenant')->nullable();
             $table->foreignId('tenant_id')->nullable()->constrained();
             $table->timestamps();
             $table->softDeletes();

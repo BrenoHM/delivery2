@@ -15,10 +15,16 @@ return new class extends Migration
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
+            $table->string('logo')->nullable();
+            $table->string('domain')->nullable();
             $table->string('primaryColor')->nullable();
             $table->string('secondaryColor')->nullable();
             $table->string('zip_code')->nullable();
-            $table->string('domain')->nullable();
+            $table->string('street')->nullable();
+            $table->string('number')->nullable();
+            $table->string('neighborhood')->nullable();
+            $table->string('state')->nullable();
+            $table->string('city')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

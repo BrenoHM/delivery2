@@ -15,14 +15,19 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+
+        $validations = [
             'name' => ['string', 'max:255'],
             'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)->whereNull('deleted_at')],
             'primaryColor' => ['string', 'nullable'],
             'secondaryColor' => ['string', 'nullable'],
-            //'slugTenant' => 'nullable|unique:users,slugTenant,'.$this->id.',id,deleted_at,NULL',
-            'domain' => 'nullable|unique:tenants,domain,'.$this->tenant_id.',id,deleted_at,NULL',
         ];
+
+        if( $this->user()->role == 'client' ) {
+            $validations['domain'] = 'required|unique:tenants,domain,'.$this->tenant_id.',id,deleted_at,NULL';
+        }
+
+        return $validations;
     }
 
     public function messages()

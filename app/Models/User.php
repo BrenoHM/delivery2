@@ -22,10 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'role',
-        'primaryColor',
-        'secondaryColor',
         'password',
-        'slugTenant',
         'tenant_id'
     ];
 

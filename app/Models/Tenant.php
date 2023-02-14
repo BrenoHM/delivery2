@@ -11,9 +11,15 @@ class Tenant extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'logo',
+        'domain',
         'primaryColor',
         'secondaryColor',
         'zip_code',
-        'domain'
+        'street',
+        'number',
+        'neighborhood',
+        'state',
+        'city'
     ];
 }
