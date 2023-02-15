@@ -13,18 +13,20 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
+        $tenantId = Auth::user()->tenant_id;
+
         if( $request->json ) {
             $category = Category::when($request->term, function ($q, $term) { 
                 return $q->whereRaw("UPPER(categorie) LIKE '%".mb_strtoupper($term)."%'");
             })
-            ->where('user_id', Auth::id())
+            ->where('tenant_id', $tenantId)
             ->paginate($request->per_page);
 
             return $category;
         }
 
         if( $request->dropdown ) {
-            return Category::where('user_id', Auth::id())->get();
+            return Category::where('tenant_id', $tenantId)->get();
         }
 
         return Inertia::render('Client/Category/Index', []);
@@ -40,7 +42,7 @@ class CategoryController extends Controller
         
         $data = $request->all();
 
-        $data['user_id'] = Auth::id();
+        $data['tenant_id'] = Auth::user()->tenant_id;
 
         Category::create($data);
 
@@ -50,7 +52,7 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        if($category->user_id !== Auth::id()) {
+        if($category->tenant_id !== Auth::user()->tenant_id) {
 
             return Redirect::route('category.index')->with('message', 'Esta categoria não pertence ao seu usuário!');
 

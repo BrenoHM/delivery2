@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('categorie');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('tenant_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
             $table->comment('Tabela de categorias.');

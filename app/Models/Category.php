@@ -12,6 +12,6 @@ class Category extends Model
 
     protected $fillable = [
         'categorie',
-        'user_id',
+        'tenant_id',
     ];
 }

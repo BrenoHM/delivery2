@@ -12,8 +12,9 @@ class HomeController extends Controller
     {
         //session_start();
         //dd($_SESSION['tenant']);
-        dd($request->session()->get('tenant')); 
-        return 'Página inicial do tenant' . config('tenant.id');
+        // dd($request->session()->get('tenant')); 
+        // return 'Página inicial do tenant' . config('tenant.id');
         //dd(config('tenant.id'));
+        return view('tenant.pages.home');
     }
 }

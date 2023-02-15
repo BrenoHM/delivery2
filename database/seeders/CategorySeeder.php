@@ -19,43 +19,43 @@ class CategorySeeder extends Seeder
         Category::insert([
             [
                 'categorie' => 'Promoção do Dia',
-                'user_id' => 2,
+                'tenant_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
                 'categorie' => 'Burguer Mês',
-                'user_id' => 2,
+                'tenant_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
                 'categorie' => 'Hamburguer Artesanal',
-                'user_id' => 2,
+                'tenant_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
                 'categorie' => 'Combos',
-                'user_id' => 2,
+                'tenant_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
                 'categorie' => 'Porções',
-                'user_id' => 2,
+                'tenant_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
                 'categorie' => 'Bebidas',
-                'user_id' => 2,
+                'tenant_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
                 'categorie' => 'Vitamina de Açaí',
-                'user_id' => 2,
+                'tenant_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
