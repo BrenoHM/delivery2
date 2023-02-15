@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('tenant_id')->constrained();
             $table->foreignId('category_id')->constrained();
             $table->string('photo')->nullable();
             $table->float('price');

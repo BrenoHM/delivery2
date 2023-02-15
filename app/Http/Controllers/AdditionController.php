@@ -17,14 +17,14 @@ class AdditionController extends Controller
             $addition = Addition::when($request->term, function ($q, $term) { 
                 return $q->whereRaw("UPPER(addition) LIKE '%".mb_strtoupper($term)."%'");
             })
-            ->where('user_id', Auth::id())
+            ->where('tenant_id', Auth::user()->tenant_id)
             ->paginate($request->per_page);
 
             return $addition;
         }
 
         if( $request->dropdown ) {
-            return Addition::where('user_id', Auth::id())->get();
+            return Addition::where('tenant_id', Auth::user()->tenant_id)->get();
         }
 
         return Inertia::render('Client/Addition/Index', []);
@@ -40,7 +40,7 @@ class AdditionController extends Controller
         
         $data = $request->all();
 
-        $data['user_id'] = Auth::id();
+        $data['tenant_id'] = Auth::user()->tenant_id;
 
         Addition::create($data);
 
@@ -50,7 +50,7 @@ class AdditionController extends Controller
 
     public function edit(Addition $addition)
     {
-        if($addition->user_id !== Auth::id()) {
+        if($addition->tenant_id !== Auth::user()->tenant_id) {
 
             return Redirect::route('addition.index')->with('message', 'Este acréscimo não pertence ao seu usuário!');
 

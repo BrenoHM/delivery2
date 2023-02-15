@@ -8,7 +8,7 @@ export default function Create(props) {
         id: props.addition.id,
         addition: props.addition.addition,
         price: props.addition.price,
-        user_id: props.auth.user.id
+        tenant_id: props.auth.user.tenant_id
     });
 
     const handleSubmit = (e) => {

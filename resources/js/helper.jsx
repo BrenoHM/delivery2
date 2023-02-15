@@ -38,3 +38,9 @@ export const slugify = text =>
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '')
     .replace(/--+/g, '-')
+
+export const CustomLoader = () => {
+      return (
+          <h1>Carregando...</h1>
+      )
+  }

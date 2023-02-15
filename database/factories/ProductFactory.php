@@ -19,7 +19,7 @@ class ProductFactory extends Factory
         return [
             'name' => 'X-Tudo',
             'description' => fake()->text(),
-            'user_id' => 2,
+            'tenant_id' => 1,
             'category_id' => 3,
             'photo' => env('AWS_URL').'/AKe3jdfZj0pN7jWnU5Ll5n6txTY5Si0eDC7Jf8pO.jpg',
             'price' => 29.99,

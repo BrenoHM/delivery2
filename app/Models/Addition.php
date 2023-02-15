@@ -11,7 +11,7 @@ class Addition extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id',
+        'tenant_id',
         'addition',
         'price'
     ];

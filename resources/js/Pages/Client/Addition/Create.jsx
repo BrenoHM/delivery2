@@ -7,7 +7,7 @@ export default function Create(props) {
     const { data, setData, post, processing, errors } = useForm({
         addition: '',
         price: '',
-        user_id: props.auth.user.id
+        tenant_id: props.auth.user.tenant_id
     });
 
     const handleSubmit = (e) => {

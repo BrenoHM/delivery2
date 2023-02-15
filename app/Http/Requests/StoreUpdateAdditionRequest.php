@@ -24,7 +24,7 @@ class StoreUpdateAdditionRequest extends FormRequest
     public function rules()
     {
         return [
-            'addition' => 'required|unique:additions,addition,' . $this->id . ',id,user_id,' . $this->user_id . ',deleted_at,NULL',
+            'addition' => 'required|unique:additions,addition,' . $this->id . ',id,tenant_id,' . $this->tenant_id . ',deleted_at,NULL',
             'price' => 'required'
         ];
     }

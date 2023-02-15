@@ -26,7 +26,7 @@ class ProductController extends Controller
                             // });
                                     //->whereRelation('category', DB::raw('UPPER(categorie)'), 'like', DB::raw('UPPER(categorie)') );
                         })
-                        ->where('user_id', Auth::id())
+                        ->where('tenant_id', Auth::user()->tenant_id)
                         ->paginate($request->per_page);
 
             return $product;
@@ -37,7 +37,7 @@ class ProductController extends Controller
 
     public function create(Request $request)
     {
-        $additions = Addition::where('user_id', Auth::id())->get();
+        $additions = Addition::where('tenant_id', Auth::user()->tenant_id)->get();
 
         return Inertia::render('Client/Products/Create', [
             'additions' => $additions
@@ -49,7 +49,7 @@ class ProductController extends Controller
         
         $data = $request->all();
 
-        $data['user_id'] = Auth::id();
+        $data['tenant_id'] = Auth::user()->tenant_id;
 
         //$request->photo->store('.');
         if( $request->photo ) {
@@ -73,35 +73,29 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        if($product->user_id !== Auth::id()) {
+        if($product->tenant_id !== Auth::user()->tenant_id) {
 
             return Redirect::route('client.products')->with('message', 'Este produto não pertence ao seu usuário!');
 
         }
 
-        $additions = Addition::where('user_id', Auth::id())->get();
+        $additions = Addition::where('tenant_id', Auth::user()->tenant_id)->get();
         $add = [];
-        //$ids = $product->additions->pluck('id');
+        
         $ids = [];
         if( $product->additions ){
             foreach($product->additions as $id) {
                 $ids[] = $id->id;
             }
         }
-        //dd($ids);
 
         if( $additions ) {
             foreach($additions as $addition) {
                 $arrayAdition = $addition->toArray();
-                //dd($arrayAdition);
                 $arrayAdition['checked'] = in_array($arrayAdition['id'], $ids) ? true : false;
                 array_push($add, $arrayAdition);
             }
         }
-
-        //dd($add);
-
-        //dd($product->additions->pluck('id'));
 
         return Inertia::render('Client/Products/Edit', [
             'product' => $product,
@@ -113,8 +107,6 @@ class ProductController extends Controller
 
     public function update(StoreUpdateProductRequest $request, $id)
     {
-
-        //dd($request->all());
         
         $product = Product::where('id', $id);
         
@@ -135,10 +127,7 @@ class ProductController extends Controller
         }
 
         if( $product->update($data) ) {
-            //if( $request->additions ) {
-            //    dd('ffjk');
-                $builderProduct->additions()->sync($request->additions);
-            //}
+            $builderProduct->additions()->sync($request->additions);
         }
 
         return Redirect::route('client.products')->with('message', 'Produto Atualizado com sucesso!');
@@ -147,23 +136,20 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        //dd($product->id);
-        // Pet::where('id', $id)->delete();
         $product->delete();
         return 'ok';
-        //return Redirect::route('client.products')->with('message', 'Produto inativado com sucesso!');
     }
 
-    public function tb()
-    {
-        $product = Product::find(1);
-        //dd($product);
-        //$product->additions()->attach(array(1,2));
-        $product->additions()->sync(array(3,4));
+    // public function tb()
+    // {
+    //     $product = Product::find(1);
+    //     //dd($product);
+    //     //$product->additions()->attach(array(1,2));
+    //     $product->additions()->sync(array(3,4));
 
-        $product2 = Product::find(2);
+    //     $product2 = Product::find(2);
 
-        $product2->additions()->sync(array(1,2));
-        dd('ok');
-    }
+    //     $product2->additions()->sync(array(1,2));
+    //     dd('ok');
+    // }
 }
