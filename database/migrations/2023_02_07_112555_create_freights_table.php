@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('freights', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('tenant_id')->constrained();
             $table->string('neighborhood');
             $table->string('city');
             $table->char('state', 2);

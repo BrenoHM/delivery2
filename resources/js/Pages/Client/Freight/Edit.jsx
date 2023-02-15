@@ -10,7 +10,7 @@ export default function Create(props) {
         city: props.freight.city,
         state: props.freight.state,
         price: props.freight.price,
-        user_id: props.auth.user.id
+        tenant_id: props.auth.user.tenant_id
     });
 
     const handleSubmit = (e) => {

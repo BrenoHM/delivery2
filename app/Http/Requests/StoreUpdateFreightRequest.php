@@ -24,7 +24,7 @@ class StoreUpdateFreightRequest extends FormRequest
     public function rules()
     {
         return [
-            'neighborhood' => 'required|unique:freights,neighborhood,' . $this->id . ',id,user_id,' . $this->user_id . ',city,' . $this->city . ',state,' . $this->state . ',deleted_at,NULL',
+            'neighborhood' => 'required|unique:freights,neighborhood,' . $this->id . ',id,tenant_id,' . $this->tenant_id . ',city,' . $this->city . ',state,' . $this->state . ',deleted_at,NULL',
             'price' => 'required'
         ];
     }

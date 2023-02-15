@@ -11,7 +11,7 @@ class Freight extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id',
+        'tenant_id',
         'neighborhood',
         'state',
         'city',

@@ -22,7 +22,7 @@ class FreightController extends Controller
             $freight = Freight::when($request->term, function ($q, $term) { 
                 return $q->whereRaw("UPPER(neighborhood) LIKE '%".mb_strtoupper($term)."%'");
             })
-            ->where('user_id', Auth::id())
+            ->where('tenant_id', Auth::user()->tenant_id)
             ->paginate($request->per_page);
 
             return $freight;
@@ -51,11 +51,10 @@ class FreightController extends Controller
      */
     public function store(StoreUpdateFreightRequest $request)
     {
-        //dd($request->all());
 
         $data = $request->all();
 
-        $data['user_id'] = Auth::id();
+        $data['tenant_id'] = Auth::user()->tenant_id;
 
         Freight::create($data);
 
@@ -70,7 +69,7 @@ class FreightController extends Controller
      */
     public function edit(Freight $freight)
     {
-        if($freight->user_id !== Auth::id()) {
+        if($freight->tenant_id !== Auth::user()->tenant_id) {
 
             return Redirect::route('freight.index')->with('message', 'Este frete não pertence ao seu usuário!');
 

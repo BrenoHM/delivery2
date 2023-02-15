@@ -9,7 +9,7 @@ export default function Create(props) {
         city: '',
         state: '',
         price: '',
-        user_id: props.auth.user.id
+        tenant_id: props.auth.user.tenant_id
     });
 
     const handleSubmit = (e) => {
@@ -27,7 +27,7 @@ export default function Create(props) {
             city: obj.city,
             state: obj.state,
             price: data.price,
-            user_id: props.auth.user.id
+            tenant_id: props.auth.user.tenant_id
         });
     }
 
