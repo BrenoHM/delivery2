@@ -14,7 +14,7 @@
         <nav class="navbar fixed-top navbar-light bg-light">
             <div class="container d-flex">
                 <div>
-                    <a class="navbar-brand" href="#">Nome da loja</a>
+                    <a class="navbar-brand" href="/">Nome da loja</a>
                 </div>
                 <div>
                     <a href="#" class="btn btn-outline-dark">Fechar compra</a>

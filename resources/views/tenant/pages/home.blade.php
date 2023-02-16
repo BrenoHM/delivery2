@@ -50,7 +50,7 @@
                         @foreach($categorie->products as $product)
                         
                             <div class="col-md-3 text-center">
-                                <a href="http://">
+                                <a href="/product/{{$product->id}}">
                                     @if ($product->photo)
                                         <img class="img-fluid" src="{{ $product->photo }}" alt="{{ $product->name }}">
                                     @else

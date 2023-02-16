@@ -71,6 +71,14 @@ class ProductController extends Controller
 
     }
 
+    public function show($tenant, Product $product)
+    {
+        if( $product->tenant_id !== config('tenant.id') ){
+            abort(404);
+        }
+        dd($product);
+    }
+
     public function edit(Product $product)
     {
         if($product->tenant_id !== Auth::user()->tenant_id) {

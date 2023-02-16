@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $tenantId = 1;//Auth::user()->tenant_id;
+        $tenantId = Auth::user()->tenant_id;
 
         if( $request->json ) {
             $category = Category::when($request->term, function ($q, $term) { 

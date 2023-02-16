@@ -38,6 +38,11 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
 
+            // Route::domain('{tenant}.' . env('APP_URL'))
+            // ->middleware(['web', 'getTennant'])
+            // ->namespace($this->namespace)
+            // ->group(base_path('routes/tenant.php'));
+
         });
     }
 
