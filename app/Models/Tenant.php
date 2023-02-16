@@ -22,4 +22,9 @@ class Tenant extends Model
         'state',
         'city'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

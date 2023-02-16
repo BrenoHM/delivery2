@@ -1,7 +1,40 @@
-body {
-  background-color: black;
-  color: black;
+a {
+  text-decoration: none;
+  color: #555;
 }
-body h1 {
-  color: blue;
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f5f7fa;
+}
+
+.banner {
+  background-color: #fff;
+  height: 350px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.banner .tenant-information {
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
+}
+
+.categories {
+  background-color: #fff;
+}
+
+.container-list-products {
+  background-color: #fff;
+  margin-bottom: 50px;
+}
+
+footer {
+  background-color: white;
+  border-top: 1px solid #ccc;
+  padding: 10px 0 10px 0;
 }/*# sourceMappingURL=tenant.css.map */

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -15,6 +17,17 @@ class HomeController extends Controller
         // dd($request->session()->get('tenant')); 
         // return 'Página inicial do tenant' . config('tenant.id');
         //dd(config('tenant.id'));
-        return view('tenant.pages.home');
+        $tenantId = config('tenant.id');
+
+        $tenant = Tenant::with('user')->find($tenantId);
+
+        $categories = Category::with('products')->where('tenant_id', $tenantId)->get();
+
+        //return $categories;
+
+        return view('tenant.pages.home', [
+            'tenant' => $tenant,
+            'categories' => $categories
+        ]);
     }
 }

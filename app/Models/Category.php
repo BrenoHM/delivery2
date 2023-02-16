@@ -14,4 +14,9 @@ class Category extends Model
         'categorie',
         'tenant_id',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
