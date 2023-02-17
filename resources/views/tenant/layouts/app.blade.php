@@ -18,7 +18,7 @@
                 </div>
                 <div>
                     <a href="#" class="btn btn-outline-dark">Fechar compra</a>
-                    <a href="#" class="btn btn-outline-dark"><i class="fa-solid fa-cart-shopping"></i></a>
+                    <a href="/cart" class="btn btn-outline-dark btn-cart-count"><i class="fa-solid fa-cart-shopping"></i> (<span>{{ Cart::getTotalQuantity() }}</span>)</a>
                 </div>
             </div>
         </nav>
@@ -33,5 +33,9 @@
         <script src="https://kit.fontawesome.com/af1f242183.js" crossorigin="anonymous"></script>
 
         @yield('js')
+
+        <div class="loader">
+            <div class="lds-ripple"><div></div><div></div></div>
+        </div>
     </body>
 </html>

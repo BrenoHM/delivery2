@@ -76,7 +76,14 @@ class ProductController extends Controller
         if( $product->tenant_id !== config('tenant.id') ){
             abort(404);
         }
-        dd($product);
+
+        //return $product->load('additions');
+
+        return view('tenant.pages.show', [
+            'product' => $product->load('additions'),
+            'tenant' => $tenant
+        ]);
+        
     }
 
     public function edit(Product $product)

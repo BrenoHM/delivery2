@@ -58,7 +58,7 @@
                                     @endif
                                     <h3 class="mt-2">{{ $product->name }}</h3>
                                     <p>{{ $product->description }}</p>
-                                    <p>R$ {{ $product->price }}</p>
+                                    <p>R$ {{ number_format($product->price, 2, ",", ".") }}</p>
                                 </a>
                             </div>
                         
