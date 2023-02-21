@@ -32,6 +32,8 @@
         <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/af1f242183.js" crossorigin="anonymous"></script>
 
+        @yield('load-js')
+
         @yield('js')
 
         <div class="loader">

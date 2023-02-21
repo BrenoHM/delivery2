@@ -110,4 +110,17 @@ class CartController extends Controller
 
         // return redirect()->route('cart.list');
     }
+
+    public function getTotalCart(Request $request)
+    {
+
+        //if ($request->session()->has('freight_details')) {
+            $request->session()->put('freight_details.delivery_method', $request->delivery_method);
+        //}
+
+        return response()->json([
+            'success' => true,
+            'totalCart' => \Cart::getTotal() 
+        ]);
+    }
 }

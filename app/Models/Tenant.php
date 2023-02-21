@@ -27,4 +27,9 @@ class Tenant extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function timelines()
+    {
+        return $this->hasMany(Timeline::class);
+    }
 }

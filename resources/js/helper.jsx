@@ -40,7 +40,18 @@ export const slugify = text =>
     .replace(/--+/g, '-')
 
 export const CustomLoader = () => {
-      return (
-          <h1>Carregando...</h1>
-      )
-  }
+    return (
+        <h1>Carregando...</h1>
+    )
+}
+
+export const dayOfWeek = [
+  null,
+  'Domingo',
+  'Segunda',
+  'Terça',
+  'Quarta',
+  'Quinta',
+  'Sexta',
+  'Sábado'
+]

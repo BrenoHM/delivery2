@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Timeline;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ class ProfileController extends Controller
     {
 
         //dd($request->all());
+
         $request->user()->fill([
             'name' => $request->name,
             'email' => $request->email
@@ -55,6 +57,16 @@ class ProfileController extends Controller
                 'state' => $request->state,
                 'city' => $request->city,
             ]);
+
+            foreach($request->timeline as $time){
+                Timeline::updateOrCreate([
+                    'tenant_id'   => Auth::user()->tenant_id,
+                    'day_of_week' => $time['day_of_week'],
+                ],[
+                    'start' => $time['start'] ? $time['start'] : '00:00:00',
+                    'end' => $time['end'] ? $time['end'] : '00:00:00'
+                ]);
+            }
         }
 
         return Redirect::route('profile.edit');

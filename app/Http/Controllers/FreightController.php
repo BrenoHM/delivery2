@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUpdateFreightRequest;
 use App\Models\Freight;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -107,5 +108,37 @@ class FreightController extends Controller
         $freight->delete();
 
         return response()->json(['ok']);
+    }
+
+    public function search(Request $request)
+    {
+        
+        $freight = Freight::where('neighborhood', $request->neighborhood)
+            ->where('city', $request->city)
+            ->where('state', $request->state)
+            ->where('tenant_id', config('tenant.id'))
+            ->first();
+
+        if( !$freight ) {
+            $request->session()->put('freight_details', null);
+            throw new \Exception("No momento não estamos entregando na sua região, mas você pode buscar no local :)");
+        }
+
+        $request->session()->put('freight_details', [
+            'cep' => $request->cep,
+            'street' => $request->street,
+            'neighborhood' => $request->neighborhood,
+            'city' => $request->city,
+            'state' => $request->state,
+            'price' => $freight->price,
+            'delivery_method' => null
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'price' => $freight->price,
+            'message' => "Retirar na " . $request->street . ", " . $request->neighborhood . " por <strong>R$ " . number_format($freight->price, 2, ",", ".") . "</strong>",
+        ]);
+
     }
 }

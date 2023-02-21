@@ -43,7 +43,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td class="text-center" colspan="5">Seu carrinho esta vazio :(</td>
+                            <td class="text-center" colspan="7">Seu carrinho esta vazio :(</td>
                         </tr>    
                     @endforelse
                     
@@ -51,43 +51,140 @@
             </table>
         </div>
         <div class="row">
-            <div class="col-md-7">
-                <a href="/" class="btn btn-outline-success">{{ Cart::getTotalQuantity() ? "Continuar comprando" : "Carrinho vazio, comece a comprar!" }}</a>
+            <div class="col-md-6">
+                <a href="/" class="btn btn-outline-success btn-continue">{{ Cart::getTotalQuantity() ? "Continuar comprando" : "Carrinho vazio, comece a comprar!" }}</a>
             </div>
-            <div class="col-md-5">
-                <div>
-                    <h2>Total no carrinho</h2>
-                    <table class="table table-bordered table-striped w-100">
-                        <tr>
-                            <td>Subtotal</td>
-                            <td class="subtotal-td">R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span></td>
-                        </tr>
-                        <tr>
-                            <td>Entrega</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>Total</td>
-                            <td class="total-td">R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span></td>
-                        </tr>
-                    </table>
-                    @if (Cart::getTotalQuantity() > 0)
-                        <button type="button" class="btn btn-success btn-cart-total w-100">
-                            Continuar para a finalização da compra - Total: R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span>
-                        </button>
-                    @endif
+            
+            @if (Cart::getTotal() > 0)
+
+                <div class="col-md-6">
+                    <div>
+                        <h2>Total no carrinho</h2>
+                        <table class="table table-bordered table-striped w-100 table-total-cart">
+                            <tr>
+                                <td>Subtotal</td>
+                                <td class="subtotal-td">R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span></td>
+                            </tr>
+                            <tr>
+                                <td class="align-middle">Entrega</td>
+                                <td>
+                                    <div class="d-flex p-2">
+                                        <input type="text" name="cep" id="cep" class="form-control" placeholder="ex: 05010000" maxlength="8" />
+                                        <button class="btn btn-secondary" onclick="handleSearchCep()">Consultar</button>
+                                    </div>
+
+                                    @if ( Session::has('freight_details') && isset(Session::get('freight_details')['price']) )
+                                        <div id="delivery_method_text">
+                                            <label class="p-2">
+                                                <input type="radio"
+                                                        name="delivery_method"
+                                                        data-price="{{ Session::get('freight_details')['price'] }}"
+                                                        value="shipping"
+                                                        onchange="handleChangeDeliveryMethod($(this))"
+                                                        @if (Session::get('freight_details')['delivery_method'] == 'shipping') checked @endif>
+                                                        Retirar na {{ Session::get('freight_details')['street'] }}, {{ Session::get('freight_details')['neighborhood'] }} por <strong>R$ {{number_format(Session::get('freight_details')['price'] , 2, ",", ".")}}</strong>
+                                            </label>
+                                        </div>
+                                    @else
+                                        <div id="delivery_method_text"></div>
+                                    @endif
+                                    
+                                    <label class="p-2">
+                                        <input
+                                            type="radio"
+                                            name="delivery_method"
+                                            data-price="0"
+                                            value="local"
+                                            onchange="handleChangeDeliveryMethod($(this))"
+                                            @if (isset(Session::get('freight_details')['delivery_method']) && Session::get('freight_details')['delivery_method'] == 'local') checked @endif /> Retirar no local
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td class="total-td">R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span></td>
+                            </tr>
+                        </table>
+                        @if (Cart::getTotalQuantity() > 0)
+                            <button type="button" class="btn btn-success btn-cart-total w-100">
+                                Continuar para a finalização da compra - Total: R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span>
+                            </button>
+                        @endif
+
+                    </div>
                 </div>
-            </div>
+                
+            @endif
+            
         </div>
-        {{-- {{$cartItems}} --}}
     </div>
+@endsection
+
+@section('load-js')
+    <script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
 
 @section('js')
     
     <script>
 
+        const handleSearchCep = () => {
+            const value = document.querySelector("#cep").value;
+            if( value.length == 8 ) {
+                cep(value)
+                    .then(data => {
+                        console.log(data.street)
+                        $.ajax({
+                            method: 'POST',
+                            url: "/freigh/search",
+                            data: {_token: "{{ csrf_token() }}", ...data},
+                            beforeSend: () => {
+                                document.querySelector('.loader').style.display = 'flex';
+                            },
+                            success: (data) => {
+                                document.querySelector('.loader').style.display = 'none';
+                                if( data.success ) {
+                                    $("#delivery_method_text").html(`
+                                        <label class="p-2">
+                                            <input type="radio" name="delivery_method" data-price="${data.price}" value="shipping" onchange="handleChangeDeliveryMethod($(this))"> ${data.message}
+                                        </label>
+                                    `)
+                                }
+                                handleChangeDeliveryMethod($(null), true);
+                            },
+                            error: (err) => {
+                                document.querySelector('.loader').style.display = 'none';
+                                $("#delivery_method_text").html('');
+                                handleChangeDeliveryMethod($(null), true);
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Oops...',
+                                    text: err.responseJSON.message,
+                                })
+                            }
+                        });
+                    })
+                    .catch(err => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: err.message,
+                            //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                });
+            }
+        }
+
         const handleChangeQuantity = (e, id) => {
+            //frete
+            let freight = $('input[name="delivery_method"]:checked').data('price');
+            if( freight ) {
+                freight = parseFloat(freight);
+            }else{
+                freight = 0;
+            }
+            
             $.ajax({
                 method: 'POST',
                 url: "/update-cart",
@@ -99,19 +196,26 @@
                     if( data.success ) {
                         $(`td.subtotal-${id} span`).text(parseFloat(data.subTotal).toFixed(2).replace('.', ','));
                         $("table td.subtotal-td span").text(parseFloat(data.totalCart).toFixed(2).replace('.', ','));
-                        $("table td.total-td span").text(parseFloat(data.totalCart).toFixed(2).replace('.', ','));
-                        $("button.btn-cart-total span").text(parseFloat(data.totalCart).toFixed(2).replace('.', ','));
+                        $("table td.total-td span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
+                        $("button.btn-cart-total span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
                         $("a.btn-cart-count span").text(data.totalQuantityCart);
                         document.querySelector('.loader').style.display = 'none';
                     }
                 }
-            })
+            });
         }
 
         const handleDeleteItem = (e) => {
             if( !confirm('Deseja realmente excluir este produto?') ) return;
 
             const id = e.attr('id');
+
+            let freight = $('input[name="delivery_method"]:checked').data('price');
+            if( freight ) {
+                freight = parseFloat(freight);
+            }else{
+                freight = 0;
+            }
 
             $.ajax({
                 method: 'POST',
@@ -124,8 +228,8 @@
                     if( data.success ) {
                         e.closest('tr').remove();
                         $("table td.subtotal-td span").text(parseFloat(data.totalCart).toFixed(2).replace('.', ','));
-                        $("table td.total-td span").text(parseFloat(data.totalCart).toFixed(2).replace('.', ','));
-                        $("button.btn-cart-total span").text(parseFloat(data.totalCart).toFixed(2).replace('.', ','));
+                        $("table td.total-td span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
+                        $("button.btn-cart-total span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
                         $("a.btn-cart-count span").text(data.totalQuantityCart);
                         document.querySelector('.loader').style.display = 'none';
                     }
@@ -133,6 +237,49 @@
             })
 
         }
+
+        const handleChangeDeliveryMethod = (e, inLoadPage = false) => {
+
+            var value = 0;
+
+            if(!inLoadPage) {
+                value = parseFloat(e.data('price'));
+            }else{
+                if( $('input[name="delivery_method"]:checked').data('price') ) {
+                    value = parseFloat($('input[name="delivery_method"]:checked').data('price'));
+                }
+            }
+
+            let data = {
+                _token: "{{ csrf_token() }}",
+                delivery_method: inLoadPage ? $('input[name="delivery_method"]:checked').val() : e.val()
+            }
+            
+            $.ajax({
+                url: "/cart/total",
+                data: data,
+                beforeSend: () => {
+                    document.querySelector('.loader').style.display = 'flex';
+                },
+                success: function(data) {
+                    if( data.success ) {
+                        $("table td.total-td span").text(parseFloat(data.totalCart + value).toFixed(2).replace('.', ','));
+                        $("button.btn-cart-total span").text(parseFloat(data.totalCart + value).toFixed(2).replace('.', ','));
+                        document.querySelector('.loader').style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        $( document ).ready(function() {
+            
+            @if(Session::has('freight_details') && Session::get('freight_details')['delivery_method'] == 'shipping')
+
+                handleChangeDeliveryMethod($(null), true);
+                
+            @endif
+            
+        });
 
     </script>
 @endsection

@@ -56,7 +56,6 @@
 
             $('.addition').each(function(){
                 const checked = $(this).is(':checked');
-                console.log($(this).data('price'));
                 if (checked) total += parseFloat($(this).data('price'));
             });
 

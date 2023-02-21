@@ -46,6 +46,22 @@ body {
   }
 }
 
+@media screen and (max-width: 767px) {
+  .cart-list a.btn-continue {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+.cart-list .table-total-cart #cep {
+  margin-right: 10px;
+}
+@media screen and (max-width: 767px) {
+  .cart-list {
+    margin-bottom: 50px;
+  }
+}
+
 footer {
   background-color: white;
   border-top: 1px solid #ccc;

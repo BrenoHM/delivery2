@@ -39,6 +39,24 @@ body {
     }
 }
 
+.cart-list {
+    a.btn-continue {
+        @media screen and (max-width: '767px') {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    }
+    .table-total-cart {
+        #cep {
+            margin-right: 10px;
+        }
+    }
+    @media screen and (max-width: '767px') {
+        margin-bottom: 50px;
+    }
+}
+
 footer {
     background-color: white;
     border-top: 1px solid #ccc;

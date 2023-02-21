@@ -4,11 +4,12 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import { slugify } from '@/helper';
+import { slugify, dayOfWeek } from '@/helper';
 import InputMask from 'react-input-mask';
 import { useState } from 'react';
 import cep from 'cep-promise';
 import Swal from 'sweetalert2';
+import TimeField from 'react-simple-timefield';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className }) {
     const user = usePage().props.auth.user;
@@ -20,6 +21,15 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     const [neighborhood, setNeighborhood] = useState(user.tenant?.neighborhood ?? "");
     const [state, setState] = useState(user.tenant?.state ?? "");
     const [city, setCity] = useState(user.tenant?.city ?? "");
+    const [timeline, setTimeline] = useState(user.tenant?.timelines.length > 0 ? user.tenant?.timelines : [
+        {day_of_week: 1, start: "", end: ""},
+        {day_of_week: 2, start: "", end: ""},
+        {day_of_week: 3, start: "", end: ""},
+        {day_of_week: 4, start: "", end: ""},
+        {day_of_week: 5, start: "", end: ""},
+        {day_of_week: 6, start: "", end: ""},
+        {day_of_week: 7, start: "", end: ""}
+    ]);
 
     if( user.tenant ){
         const {primaryColor, secondaryColor} = user.tenant;
@@ -38,7 +48,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         neighborhood: user.tenant?.neighborhood ?? "",
         number: user.tenant?.number ?? "",
         city: user.tenant?.city ?? "",
-        state: user.tenant?.state ?? ""
+        state: user.tenant?.state ?? "",
+        timeline: user.tenant?.timelines.length > 0 ? user.tenant?.timelines : "",
     });
 
     //before send data
@@ -50,7 +61,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         neighborhood: neighborhood,
         //number: number,
         city: city,
-        state: state
+        state: state,
+        timeline: timeline
     }));
 
     const submit = (e) => {
@@ -64,7 +76,6 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         if( value.length == 8 ) {
             cep(value)
                 .then(async data => {
-                    console.log(data);
                     setStreet(data.street);
                     setNeighborhood(data.neighborhood);
                     setCity(data.city);
@@ -89,6 +100,12 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     })
                 })
         }
+    }
+
+    const changeTimeline = (value, field, index) => {
+        let aux = timeline;
+        aux[index][field] = value;
+        setTimeline(aux);
     }
 
     return (
@@ -263,6 +280,42 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                             <InputError className="mt-2" message={errors.state} />
                         </div>
+
+                        <header>
+                            <h2 className="text-lg font-medium text-gray-900">Cronograma</h2>
+
+                            <p className="mt-1 text-sm text-gray-600">
+                                Atualize o cronograma de funcionamento do seu estabelecimento.
+                            </p>
+                        </header>
+
+                        {timeline.map((time, i) => (
+                            <div key={timeline[i].day_of_week}>
+                                
+                                <InputLabel forInput={timeline[i].day_of_week} value={dayOfWeek[timeline[i].day_of_week]} className="mb-1" />
+                                
+                                <TimeField
+                                    className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                    style={{width:'70px'}}
+                                    id={timeline[i].day_of_week}
+                                    value={timeline[i].start}
+                                    onChange={(e) => changeTimeline(e.target.value, 'start', i)}
+                                    colon=":"
+                                />
+
+                                <span className='mx-1'>até</span>
+
+                                <TimeField
+                                    className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                    style={{width:'70px'}}
+                                    value={timeline[i].end}
+                                    onChange={(e) => changeTimeline(e.target.value, 'end', i)}
+                                    colon=":"
+                                />
+
+                            </div>
+                        ))}
+                            
                     </>
                 
                 )}

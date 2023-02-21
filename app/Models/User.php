@@ -45,7 +45,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $with = ['tenant'];
+    protected $with = ['tenant', 'tenant.timelines'];
 
     public function tenant()
     {
