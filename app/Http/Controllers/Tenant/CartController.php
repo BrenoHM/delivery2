@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Addition;
+use App\Models\Timeline;
 use Faker\Core\Uuid;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,13 @@ class CartController extends Controller
     public function cartList()
     {
         $cartItems = \Cart::getContent();
-        // $cartItem = \Cart::get(1);
-        // dd($cartItem);
-        return view('tenant.pages.cart', compact('cartItems'));
+
+        $isOpened = Timeline::isOpened(config('tenant.id'));
+        
+        return view('tenant.pages.cart', [
+            'cartItems' => $cartItems,
+            'isOpened' => $isOpened
+        ]);
     }
 
 

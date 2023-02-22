@@ -105,10 +105,13 @@
                                 <td class="total-td">R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span></td>
                             </tr>
                         </table>
-                        @if (Cart::getTotalQuantity() > 0)
+                        
+                        @if ($isOpened)
                             <button type="button" class="btn btn-success btn-cart-total w-100">
                                 Continuar para a finalização da compra - Total: R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span>
                             </button>
+                        @else
+                            <button type="button" class="btn btn-warning w-100">Fechado para pedidos</button>
                         @endif
 
                     </div>

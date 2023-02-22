@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUpdateProductRequest;
 use App\Models\Addition;
 use App\Models\Product;
+use App\Models\Timeline;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
@@ -73,15 +74,18 @@ class ProductController extends Controller
 
     public function show($tenant, Product $product)
     {
-        if( $product->tenant_id !== config('tenant.id') ){
+        $tenantId = config('tenant.id');
+
+        if( $product->tenant_id !== $tenantId ){
             abort(404);
         }
 
-        //return $product->load('additions');
+        $isOpened = Timeline::isOpened($tenantId);
 
         return view('tenant.pages.show', [
             'product' => $product->load('additions'),
-            'tenant' => $tenant
+            'tenant' => $tenant,
+            'isOpened' => $isOpened
         ]);
         
     }

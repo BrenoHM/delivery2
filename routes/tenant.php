@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Tenant\CartController;
 use App\Http\Controllers\Tenant\HomeController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index']);
@@ -22,3 +23,15 @@ Route::post('clear', [CartController::class, 'clearAllCart'])->name('cart.clear'
 Route::get('cart/total', [CartController::class, 'getTotalCart'])->name('cart.total');
 
 Route::post('/freigh/search', [FreightController::class, 'search'])->name('freight.search');
+
+
+
+
+//rotas provisorias
+Route::get('session', function(){
+    return Session::all();
+});
+
+Route::get('session-destroy', function(){
+    return Session::flush(); // removes all session data
+});

@@ -14,6 +14,11 @@
                     {{$tenant->zip_code}} - {{$tenant->city}}/{{$tenant->state}}
                 @endif
             </p>
+            <p class="text-center mb-0">
+                <button class="btn {{ $isOpened ? 'btn-success' : 'btn-warning' }}">
+                    {{ $isOpened ? 'Aberto agora' : 'Fechado para pedidos' }}
+                </button>
+            </p>
         </div>
     </section>
 

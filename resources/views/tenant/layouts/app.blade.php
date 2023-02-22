@@ -17,7 +17,9 @@
                     <a class="navbar-brand" href="/">{{Session::get('tenant')->user->name}}</a>
                 </div>
                 <div>
-                    <a href="#" class="btn btn-outline-dark">Fechar compra</a>
+                    @if (Cart::getTotalQuantity())
+                        <a href="/checkout" class="btn btn-outline-dark">Finalizar compra</a>    
+                    @endif
                     <a href="/cart" class="btn btn-outline-dark btn-cart-count"><i class="fa-solid fa-cart-shopping"></i> (<span>{{ Cart::getTotalQuantity() }}</span>)</a>
                 </div>
             </div>

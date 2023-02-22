@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tenant;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Tenant;
+use App\Models\Timeline;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -22,11 +23,14 @@ class HomeController extends Controller
                     ->orderBy('products_count', 'desc')
                     ->get();
 
+        $isOpened = Timeline::isOpened($tenantId);
+
         //return $categories;
 
         return view('tenant.pages.home', [
             'tenant' => $tenant,
-            'categories' => $categories
+            'categories' => $categories,
+            'isOpened' => $isOpened
         ]);
     }
 }
