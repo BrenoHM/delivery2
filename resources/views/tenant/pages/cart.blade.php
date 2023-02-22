@@ -109,9 +109,9 @@
                         </table>
                         
                         @if ($isOpened)
-                            <button type="button" class="btn btn-success btn-cart-total w-100">
+                            <a href="/checkout" class="btn btn-success btn-cart-total w-100">
                                 Continuar para a finalização da compra - Total: R$ <span>{{ number_format(Cart::getTotal(),2,",",".") }}<span>
-                            </button>
+                            </a>
                         @else
                             <button type="button" class="btn btn-warning w-100">Fechado para pedidos</button>
                         @endif

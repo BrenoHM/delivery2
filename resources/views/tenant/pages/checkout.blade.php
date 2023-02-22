@@ -30,7 +30,7 @@
                         <input
                           type="radio"
                           name="delivery_method"
-                          //data-price="0"
+                          data-price="{{ $freightDetails['price'] ?? "" }}"
                           value="shipping"
                           onchange="handleChangeDeliveryMethod($(this))"
                           @if (isset($freightDetails['delivery_method']) && $freightDetails['delivery_method'] == 'shipping') checked @endif /> Entregar no meu endereço
@@ -53,9 +53,9 @@
                         </div>
 
                         <div class="mb-3">
-                          <label for="number" class="form-label">Número</label>
+                          <label for="number" class="form-label">Número *</label>
                           <div class="col-md-3">
-                            <input type="number" step="1" min="1" name="number" class="form-control" id="number" placeholder="Ex: 80" />
+                            <input type="number" step="1" min="1" name="number" class="form-control" id="number" placeholder="Ex: 80" required />
                           </div>
                         </div>
 
@@ -132,14 +132,14 @@
                                     <tr>
                                       <td><strong>+Frete</strong></td>
                                       <td>&nbsp;</td>
-                                      <td>
+                                      <td class="tot-frete">
                                         <strong>
                                           @if ($freightDetails['delivery_method'] == "local")
-                                              R$ 0,00
+                                              R$ <span>0,00</span>
                                           @elseif($freightDetails['delivery_method'] == null)
-                                              Não informado
+                                              <span>Não informado</span>
                                           @else
-                                              R$ {{ number_format(($freightDetails['price']),2,",",".") }}
+                                              R$ <span>{{ number_format(($freightDetails['price']),2,",",".") }}</span>
                                           @endif
                                         <strong>
                                       </td>
@@ -147,12 +147,12 @@
                                     <tr>
                                       <td><strong>Total</strong></td>
                                       <td>&nbsp;</td>
-                                      <td>
+                                      <td class="tot-total">
                                         <strong>
                                           @if ($freightDetails['delivery_method'] == "local" || $freightDetails['delivery_method'] == null)
-                                              R$ {{ number_format((Cart::getTotal()),2,",",".") }}
+                                              R$ <span>{{ number_format((Cart::getTotal()),2,",",".") }}</span>
                                           @else
-                                              R$ {{ number_format((Cart::getTotal() + $freightDetails['price']),2,",",".") }}
+                                              R$ <span>{{ number_format((Cart::getTotal() + $freightDetails['price']),2,",",".") }}</span>
                                           @endif
                                         <strong>
                                       </td>
@@ -188,40 +188,42 @@
           if( e.val() == 'local' ) {
             $('.block_address').removeClass('d-block');
             $('.block_address').addClass('d-none');
+            $("#number").removeAttr("required");
           }else if(e.val() == 'shipping'){
             $('.block_address').removeClass('d-none');
             $('.block_address').addClass('d-block');
+            $("#number").attr("required", true);
           }
 
-            // var value = 0;
+          var value = 0;
 
-            // if(!inLoadPage) {
-            //     value = parseFloat(e.data('price'));
-            // }else{
-            //     if( $('input[name="delivery_method"]:checked').data('price') ) {
-            //         value = parseFloat($('input[name="delivery_method"]:checked').data('price'));
-            //     }
-            // }
+          if(!inLoadPage) {
+              value = parseFloat(e.data('price'));
+          }else{
+              if( $('input[name="delivery_method"]:checked').data('price') ) {
+                  value = parseFloat($('input[name="delivery_method"]:checked').data('price'));
+              }
+          }
 
-            // let data = {
-            //     _token: "{{ csrf_token() }}",
-            //     delivery_method: inLoadPage ? $('input[name="delivery_method"]:checked').val() : e.val()
-            // }
+          let data = {
+              _token: "{{ csrf_token() }}",
+              delivery_method: inLoadPage ? $('input[name="delivery_method"]:checked').val() : e.val()
+          }
             
-            // $.ajax({
-            //     url: "/cart/total",
-            //     data: data,
-            //     beforeSend: () => {
-            //         document.querySelector('.loader').style.display = 'flex';
-            //     },
-            //     success: function(data) {
-            //         if( data.success ) {
-            //             $("table td.total-td span").text(parseFloat(data.totalCart + value).toFixed(2).replace('.', ','));
-            //             $("button.btn-cart-total span").text(parseFloat(data.totalCart + value).toFixed(2).replace('.', ','));
-            //             document.querySelector('.loader').style.display = 'none';
-            //         }
-            //     }
-            // });
+          $.ajax({
+              url: "/cart/total",
+              data: data,
+              beforeSend: () => {
+                  document.querySelector('.loader').style.display = 'flex';
+              },
+              success: function(data) {
+                  if( data.success ) {
+                      $("table td.tot-frete span").text(parseFloat(value).toFixed(2).replace('.', ','));
+                      $("table td.tot-total span").text(parseFloat(data.totalCart + value).toFixed(2).replace('.', ','));
+                      document.querySelector('.loader').style.display = 'none';
+                  }
+              }
+          });
         }
 
         $( document ).ready(function() {
