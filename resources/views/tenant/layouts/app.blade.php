@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Delivery') }}</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/tenant.css') }}" >
         
@@ -14,7 +14,7 @@
         <nav class="navbar fixed-top navbar-light bg-light">
             <div class="container d-flex">
                 <div>
-                    <a class="navbar-brand" href="/">Nome da loja</a>
+                    <a class="navbar-brand" href="/">{{Session::get('tenant')->user->name}}</a>
                 </div>
                 <div>
                     <a href="#" class="btn btn-outline-dark">Fechar compra</a>

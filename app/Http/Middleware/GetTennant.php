@@ -23,11 +23,10 @@ class GetTennant
         $current_url = explode('.', $current_url);
         $subdomain = array_shift($current_url);
         
-        $tenant = Tenant::where('domain', $subdomain)->first();
+        $tenant = Tenant::with('user')->where('domain', $subdomain)->first();
         if ($tenant) {
             config(['tenant.id' => $tenant->id]);
             $request->session()->put('tenant', $tenant); //store it in session
-            //dd(config('tenant.id'));
         }
         else {
             abort(404);

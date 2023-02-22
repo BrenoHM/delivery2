@@ -4,8 +4,16 @@
     <section class="banner d-flex align-items-center justify-content-center" style="background: url({{ asset('assets/images/banner.jpg') }})">
         <div class="tenant-information">
             <h1 class="text-center">{{$tenant->user->name}}</h1>
-            <p class="text-center">{{$tenant->street}}, {{$tenant->number}} - {{$tenant->neighborhood}}</p>
-            <p class="text-center">{{$tenant->zip_code}} - {{$tenant->city}}/{{$tenant->state}}</p>
+            <p class="text-center">
+                @if ( $tenant->street && $tenant->number && $tenant->neighborhood )
+                    {{$tenant->street}}, {{$tenant->number}} - {{$tenant->neighborhood}}    
+                @endif
+            </p>
+            <p class="text-center">
+                @if ( $tenant->zip_code && $tenant->city && $tenant->state )
+                    {{$tenant->zip_code}} - {{$tenant->city}}/{{$tenant->state}}
+                @endif
+            </p>
         </div>
     </section>
 
