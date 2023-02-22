@@ -1,8 +1,10 @@
 @extends('tenant.layouts.app')
 
+@section('title', 'Cart')
+
 @section('content')
     <div class="container cart-list">
-        <h1>Carrinho</h1>
+        <h2 class="border-bottom">Carrinho</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>

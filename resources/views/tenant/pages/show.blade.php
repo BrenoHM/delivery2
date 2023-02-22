@@ -1,5 +1,7 @@
 @extends('tenant.layouts.app')
 
+@section('title', $product->name)
+
 @section('content')
     <div class="container product-show">
         <div class="row">

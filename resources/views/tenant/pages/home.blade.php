@@ -1,5 +1,7 @@
 @extends('tenant.layouts.app')
 
+@section('title', 'Home')
+
 @section('content')
     <section class="banner d-flex align-items-center justify-content-center" style="background: url({{ asset('assets/images/banner.jpg') }})">
         <div class="tenant-information">
