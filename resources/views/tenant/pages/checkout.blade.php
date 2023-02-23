@@ -72,6 +72,9 @@
                           <label for="street" class="form-label">Endereço</label>
                           <div class="col-md-12">
                             <input type="text" name="street" class="form-control" id="street" placeholder="Ex: Rua Maria" value="{{ $freightDetails['street'] ?? "" }}" readonly />
+                            @if($errors->has('street'))
+                              <div class="invalid-feedback d-block">{{ $errors->first('street') }}</div>
+                            @endif
                           </div>
                         </div>
 
@@ -96,6 +99,9 @@
                           <label for="neighborhood" class="form-label">Bairro</label>
                           <div class="col-md-6">
                             <input type="text" name="neighborhood" class="form-control" id="neighborhood" placeholder="Ex: Apt 200" value="{{ $freightDetails['neighborhood'] ?? "" }}" readonly />
+                            @if($errors->has('neighborhood'))
+                              <div class="invalid-feedback d-block">{{ $errors->first('neighborhood') }}</div>
+                            @endif
                           </div>
                         </div>
 
@@ -103,6 +109,9 @@
                           <label for="city" class="form-label">Cidade</label>
                           <div class="col-md-12">
                             <input type="text" name="city" class="form-control" id="city" placeholder="Ex: São Paulo" value="{{ $freightDetails['city'] ?? "" }}" readonly />
+                            @if($errors->has('city'))
+                              <div class="invalid-feedback d-block">{{ $errors->first('city') }}</div>
+                            @endif
                           </div>
                         </div>
 
@@ -110,6 +119,9 @@
                           <label for="state" class="form-label">Estado</label>
                           <div class="col-md-2">
                             <input type="text" name="state" class="form-control" id="state" placeholder="Ex: SP" value="{{ $freightDetails['state'] ?? "" }}" readonly />
+                            @if($errors->has('state'))
+                              <div class="invalid-feedback d-block">{{ $errors->first('state') }}</div>
+                            @endif
                           </div>
                         </div>
                     </div>

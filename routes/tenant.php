@@ -26,6 +26,7 @@ Route::get('cart/total', [CartController::class, 'getTotalCart'])->name('cart.to
 Route::post('/freigh/search', [FreightController::class, 'search'])->name('freight.search');
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('checkout', [OrderController::class, 'store'])->name('checkout.store');
+Route::get('order/{id}', [OrderController::class, 'show'])->name('order.show');
 
 
 //rotas provisorias
