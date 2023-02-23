@@ -14,15 +14,35 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Nome *</label>
                         <div class="col-md-12">
-                          <input type="text" name="name" class="form-control" id="name" placeholder="Ex: João" required />
+                          <input type="text" name="name" class="form-control" id="name" placeholder="Ex: João" value="{{ old('name') }}" required />
+                          @if($errors->has('name'))
+                            <div class="invalid-feedback d-block">{{ $errors->first('name') }}</div>
+                          @endif
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="phone" class="form-label">Telefone *</label>
                         <div class="col-md-6">
-                          <input type="text" name="phone" class="form-control" id="phone" placeholder="Ex: (99) 99999-9999" required />
+                          <input type="text" name="phone" class="form-control" id="phone" placeholder="Ex: (99) 99999-9999" value="{{ old('phone') }}" required />
+                          @if($errors->has('phone'))
+                            <div class="invalid-feedback d-block">{{ $errors->first('phone') }}</div>
+                          @endif
                         </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="payment_method" class="form-label">Forma de pagamento *</label>
+                      <div class="col-md-6">
+                        <select name="payment_method" id="payment_method" class="form-control" required>
+                          <option value="">Selecione</option>
+                          <option value="money">Dinheiro</option>
+                          <option value="card">Cartão</option>
+                        </select>
+                        @if($errors->has('payment_method'))
+                          <div class="invalid-feedback d-block">{{ $errors->first('payment_method') }}</div>
+                        @endif
+                      </div>
                     </div>
 
                     <div class="mb-3">
@@ -42,6 +62,9 @@
                             <label for="zip_code" class="form-label">Cep *</label>
                             <div class="col-md-6">
                               <input type="text" name="zip_code" class="form-control" id="zip_code" placeholder="Ex: 05010-000" value="{{ $freightDetails['zip_code'] ?? "" }}" onkeyup="handleSearchCep()" required />
+                              @if($errors->has('zip_code'))
+                                <div class="invalid-feedback d-block">{{ $errors->first('zip_code') }}</div>
+                              @endif
                             </div>
                         </div>
 
@@ -55,7 +78,10 @@
                         <div class="mb-3">
                           <label for="number" class="form-label">Número *</label>
                           <div class="col-md-3">
-                            <input type="number" step="1" min="1" name="number" class="form-control" id="number" placeholder="Ex: 80" required />
+                            <input type="number" step="1" min="1" name="number" class="form-control" id="number" placeholder="Ex: 80" />
+                            @if($errors->has('number'))
+                              <div class="invalid-feedback d-block">{{ $errors->first('number') }}</div>
+                            @endif
                           </div>
                         </div>
 
@@ -97,6 +123,9 @@
                         onchange="handleChangeDeliveryMethod($(this))"
                         @if (isset($freightDetails['delivery_method']) && $freightDetails['delivery_method'] == 'local') checked @endif required /> Retirar no local
                     </label>
+                    @if($errors->has('delivery_method'))
+                      <div class="invalid-feedback d-block">{{ $errors->first('delivery_method') }}</div>
+                    @endif
                     
                 </div>
                 <div class="col-md-5 border rounded-1 offset-md-1 p-3">
