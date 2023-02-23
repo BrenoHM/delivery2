@@ -16,6 +16,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: delivery2
+      TZ: America/Sao_Paulo
   minio:
     image: minio/minio
     ports:
