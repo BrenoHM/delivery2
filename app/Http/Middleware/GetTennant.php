@@ -27,6 +27,9 @@ class GetTennant
         if ($tenant) {
             config(['tenant.id' => $tenant->id]);
             $request->session()->put('tenant', $tenant); //store it in session
+            if (!$request->session()->has('freight_details')) {
+                $request->session()->put('freight_details.delivery_method', null);
+            }
         }
         else {
             abort(404);

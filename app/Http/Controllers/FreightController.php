@@ -125,7 +125,7 @@ class FreightController extends Controller
         }
 
         $request->session()->put('freight_details', [
-            'cep' => $request->cep,
+            'zip_code' => $request->cep,
             'street' => $request->street,
             'neighborhood' => $request->neighborhood,
             'city' => $request->city,

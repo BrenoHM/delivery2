@@ -6,7 +6,7 @@
     <div class="container checkout-page">
         <h2 class="border-bottom mb-3">Finalização de compra</h2>
         <form action="{{ route('checkout.store', $tenant) }}" method="POST">
-            @csrf
+            @if ($isOpened) @csrf @endif
             <div class="row">
                 <div class="col-md-6 border rounded-1 p-3">
                     <h4>Detalhes de faturamento</h4>
@@ -30,18 +30,18 @@
                         <input
                           type="radio"
                           name="delivery_method"
-                          data-price="{{ $freightDetails['price'] ?? "" }}"
+                          data-price="{{ $freightDetails['price'] ?? 0 }}"
                           value="shipping"
                           onchange="handleChangeDeliveryMethod($(this))"
-                          @if (isset($freightDetails['delivery_method']) && $freightDetails['delivery_method'] == 'shipping') checked @endif /> Entregar no meu endereço
+                          @if (isset($freightDetails['delivery_method']) && $freightDetails['delivery_method'] == 'shipping') checked @endif required /> Entregar no meu endereço
                       </label>
                     </div>
 
                     <div class="block_address {{ isset($freightDetails['delivery_method']) && $freightDetails['delivery_method'] == 'shipping' ? 'd-block' : 'd-none' }}">
                         <div class="mb-3">
-                            <label for="zip_code" class="form-label">Cep</label>
+                            <label for="zip_code" class="form-label">Cep *</label>
                             <div class="col-md-6">
-                              <input type="text" name="zip_code" maxlength="8" class="form-control" id="zip_code" placeholder="Ex: 05010000" value="{{ $freightDetails['cep'] ?? "" }}" />
+                              <input type="text" name="zip_code" class="form-control" id="zip_code" placeholder="Ex: 05010-000" value="{{ $freightDetails['zip_code'] ?? "" }}" onkeyup="handleSearchCep()" required />
                             </div>
                         </div>
 
@@ -83,7 +83,7 @@
                         <div class="mb-3">
                           <label for="state" class="form-label">Estado</label>
                           <div class="col-md-2">
-                            <input type="text" name="state" class="form-control" id="state" placeholder="Ex: São Paulo" value="{{ $freightDetails['state'] ?? "" }}" readonly />
+                            <input type="text" name="state" class="form-control" id="state" placeholder="Ex: SP" value="{{ $freightDetails['state'] ?? "" }}" readonly />
                           </div>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
                         data-price="0"
                         value="local"
                         onchange="handleChangeDeliveryMethod($(this))"
-                        @if (isset($freightDetails['delivery_method']) && $freightDetails['delivery_method'] == 'local') checked @endif /> Retirar no local
+                        @if (isset($freightDetails['delivery_method']) && $freightDetails['delivery_method'] == 'local') checked @endif required /> Retirar no local
                     </label>
                     
                 </div>
@@ -134,13 +134,15 @@
                                       <td>&nbsp;</td>
                                       <td class="tot-frete">
                                         <strong>
-                                          @if ($freightDetails['delivery_method'] == "local")
-                                              R$ <span>0,00</span>
-                                          @elseif($freightDetails['delivery_method'] == null)
-                                              <span>Não informado</span>
-                                          @else
-                                              R$ <span>{{ number_format(($freightDetails['price']),2,",",".") }}</span>
-                                          @endif
+                                          
+                                            @if ($freightDetails['delivery_method'] == "local")
+                                                R$ <span>0,00</span>
+                                            @elseif($freightDetails['delivery_method'] == null)
+                                                R$ <span>Não informado</span>
+                                            @elseif($freightDetails['delivery_method'] == "shipping")
+                                                R$ <span>{{ isset($freightDetails['price']) ? number_format(($freightDetails['price']),2,",",".") : "0,00" }}</span>
+                                            @endif
+                                          
                                         <strong>
                                       </td>
                                     </tr>
@@ -149,11 +151,13 @@
                                       <td>&nbsp;</td>
                                       <td class="tot-total">
                                         <strong>
-                                          @if ($freightDetails['delivery_method'] == "local" || $freightDetails['delivery_method'] == null)
-                                              R$ <span>{{ number_format((Cart::getTotal()),2,",",".") }}</span>
-                                          @else
-                                              R$ <span>{{ number_format((Cart::getTotal() + $freightDetails['price']),2,",",".") }}</span>
-                                          @endif
+                                          
+                                            @if ($freightDetails['delivery_method'] == "local" || $freightDetails['delivery_method'] == null)
+                                                R$ <span>{{ number_format((Cart::getTotal()),2,",",".") }}</span>
+                                            @else
+                                                R$ <span>{{ isset($freightDetails['price']) ? number_format((Cart::getTotal() + $freightDetails['price']),2,",",".") : number_format((Cart::getTotal()),2,",",".") }}</span>
+                                            @endif
+                                          
                                         <strong>
                                       </td>
                                     </tr>
@@ -172,28 +176,107 @@
                           rows="5"></textarea>
                       </div>
                     </div>
-                    <button class="btn btn-success w-100">Enviar pedido</button>
+                    @if ($isOpened)
+                      <button class="btn btn-success w-100">Enviar pedido</button>
+                    @else
+                      <button type="button" class="btn btn-warning w-100">Fechado para pedidos</button>
+                    @endif
                 </div>
             </div>
         </form>
     </div>
 @endsection
 
+@section('load-js')
+    <script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
+@endsection
+
 @section('js')
     
     <script>
 
-        const handleChangeDeliveryMethod = (e, inLoadPage = false) => {
+        const handleSearchCep = () => {
+            const value = document.querySelector("#zip_code").value;
+            if( value.length == 9 ) {
+                cep(value)
+                    .then(data => {
+                        const result = data;
+                        $.ajax({
+                            method: 'POST',
+                            url: "/freigh/search",
+                            data: {_token: "{{ csrf_token() }}", ...data},
+                            beforeSend: () => {
+                                document.querySelector('.loader').style.display = 'flex';
+                            },
+                            success: (data) => {
+                                document.querySelector('.loader').style.display = 'none';
+                                if( data.success ) {  
+                                  $("#street").val(result.street);
+                                  $("#number").focus();
+                                  $("#neighborhood").val(result.neighborhood);
+                                  $("#city").val(result.city);
+                                  $("#state").val(result.state);
+                                }
+                                $('input[name="delivery_method"][value="shipping"]').data('price', data.price);
+                                handleChangeDeliveryMethod($(null), true);
+                            },
+                            error: (err) => {
+                                document.querySelector('.loader').style.display = 'none';
+                                $('input[name="delivery_method"][value="shipping"]').data('price', 0);
+                                handleChangeDeliveryMethod($(null), true);
+                                $("#zip_code").val('');
+                                $("#street").val('');
+                                $("#number").val('');
+                                $("#complement").val('');
+                                $("#neighborhood").val('');
+                                $("#city").val('');
+                                $("#state").val('');
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Oops...',
+                                    text: err.responseJSON.message,
+                                })
+                            }
+                        });
+                    })
+                    .catch(err => {
+                        $('input[name="delivery_method"][value="shipping"]').data('price', 0);
+                        handleChangeDeliveryMethod($(null), true);
+                        $("#zip_code").val('');
+                        $("#street").val('');
+                        $("#number").val('');
+                        $("#complement").val('');
+                        $("#neighborhood").val('');
+                        $("#city").val('');
+                        $("#state").val('');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: err.message,
+                        })
+                });
+            }
+        }
 
-          if( e.val() == 'local' ) {
+        const configFields = (value) => {
+          if( value == 'local' ) {
             $('.block_address').removeClass('d-block');
             $('.block_address').addClass('d-none');
             $("#number").removeAttr("required");
-          }else if(e.val() == 'shipping'){
+            $("#zip_code").removeAttr("required");
+          }else if(value == 'shipping'){
             $('.block_address').removeClass('d-none');
             $('.block_address').addClass('d-block');
             $("#number").attr("required", true);
+            $("#zip_code").attr("required", true);
           }
+        }
+
+        const handleChangeDeliveryMethod = (e, inLoadPage = false) => {
+
+          configFields(e.val())
 
           var value = 0;
 
@@ -227,13 +310,22 @@
         }
 
         $( document ).ready(function() {
-            
-            // @if(Session::has('freight_details') && Session::get('freight_details')['delivery_method'] == 'shipping')
 
-            //     handleChangeDeliveryMethod($(null), true);
-                
-            // @endif
+            configFields($('input[name="delivery_method"]:checked').val());
             
+            var behavior = function (val) {
+                return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            },
+
+            options = {
+                onKeyPress: function (val, e, field, options) {
+                    field.mask(behavior.apply({}, arguments), options);
+                }
+            };
+
+            $('#phone').mask(behavior, options);
+
+            $("#zip_code").mask('00000-000');
         });
 
     </script>

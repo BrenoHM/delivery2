@@ -71,7 +71,7 @@
                                 <td class="align-middle">Entrega</td>
                                 <td>
                                     <div class="d-flex p-2">
-                                        <input type="text" name="cep" id="cep" class="form-control" placeholder="ex: 05010000" maxlength="8" />
+                                        <input type="text" name="zip_code" id="zip_code" class="form-control" placeholder="ex: 05010-000" />
                                         <button class="btn btn-secondary" onclick="handleSearchCep()">Consultar</button>
                                     </div>
 
@@ -128,6 +128,7 @@
 @section('load-js')
     <script src="https://cdn.jsdelivr.net/npm/cep-promise/dist/cep-promise.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
 @endsection
 
 @section('js')
@@ -135,11 +136,10 @@
     <script>
 
         const handleSearchCep = () => {
-            const value = document.querySelector("#cep").value;
-            if( value.length == 8 ) {
+            const value = document.querySelector("#zip_code").value;
+            if( value.length == 9 ) {
                 cep(value)
                     .then(data => {
-                        console.log(data.street)
                         $.ajax({
                             method: 'POST',
                             url: "/freigh/search",
@@ -202,7 +202,7 @@
                         $(`td.subtotal-${id} span`).text(parseFloat(data.subTotal).toFixed(2).replace('.', ','));
                         $("table td.subtotal-td span").text(parseFloat(data.totalCart).toFixed(2).replace('.', ','));
                         $("table td.total-td span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
-                        $("button.btn-cart-total span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
+                        $("a.btn-cart-total span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
                         $("a.btn-cart-count span").text(data.totalQuantityCart);
                         document.querySelector('.loader').style.display = 'none';
                     }
@@ -234,7 +234,7 @@
                         e.closest('tr').remove();
                         $("table td.subtotal-td span").text(parseFloat(data.totalCart).toFixed(2).replace('.', ','));
                         $("table td.total-td span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
-                        $("button.btn-cart-total span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
+                        $("a.btn-cart-total span").text(parseFloat(data.totalCart + freight).toFixed(2).replace('.', ','));
                         $("a.btn-cart-count span").text(data.totalQuantityCart);
                         document.querySelector('.loader').style.display = 'none';
                     }
@@ -269,7 +269,7 @@
                 success: function(data) {
                     if( data.success ) {
                         $("table td.total-td span").text(parseFloat(data.totalCart + value).toFixed(2).replace('.', ','));
-                        $("button.btn-cart-total span").text(parseFloat(data.totalCart + value).toFixed(2).replace('.', ','));
+                        $("a.btn-cart-total span").text(parseFloat(data.totalCart + value).toFixed(2).replace('.', ','));
                         document.querySelector('.loader').style.display = 'none';
                     }
                 }
@@ -283,6 +283,8 @@
                 handleChangeDeliveryMethod($(null), true);
                 
             @endif
+
+            $("#zip_code").mask('00000-000');
             
         });
 

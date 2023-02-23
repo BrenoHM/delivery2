@@ -56,7 +56,7 @@ body {
     margin-bottom: 10px;
   }
 }
-.cart-list .table-total-cart #cep {
+.cart-list .table-total-cart #zip_code {
   margin-right: 10px;
 }
 @media screen and (max-width: 767px) {
