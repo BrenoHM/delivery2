@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdditionOrderItem;
+use App\Models\LogStatusOrder;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\StatusOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -79,20 +81,57 @@ class OrderController extends Controller
                 }
             }
 
+            //create new log status order
+            LogStatusOrder::create([
+                'order_id' => $newOrder->id,
+                'status_order_id' => 1
+            ]);
+
             return $newOrder;
         
         });
 
         \Cart::clear();
 
-        return redirect()->route('order.show', [
+        return redirect()->route('order.information', [
             'tenant' => $tenant,
-            'id' => $result->id
+            'order' => $result->id
         ]);
     }
 
-    public function show($tenant, $id)
+    public function orderInformation($tenant, Order $order)
     {
-        dd($tenant, $id);
+
+        $statusLabel = [
+            'label' => 
+                [
+                    1 => 'Pedido Realizado',
+                    2 => 'Em preparação',
+                    3 => 'Saiu para entrega',
+                    4 => 'Entregue'
+                ],
+            'icon' =>
+                [
+                    1 => 'fa-user',
+                    2 => 'fa-bread-slice',
+                    3 => 'fa-person-running',
+                    4 => 'fa-truck'
+                ]
+        ];
+
+        $status = StatusOrder::find([1,2,3,4])->toArray();
+
+        foreach($status as $key => $value) {
+            $exist = LogStatusOrder::where('order_id', $order->id)->where('status_order_id', $value['id'])->orderBy('id', 'desc')->first();
+            $status[$key]['label'] = $statusLabel['label'][$value['id']];
+            $status[$key]['active'] = $exist ? true : false;
+            $status[$key]['quando'] = $exist ? $exist->created_at->format('d/m/y H:i:s') : "";
+            $status[$key]['icon'] = $statusLabel['icon'][$value['id']];
+        }
+
+        return view('tenant.pages.order-information', [
+            'order' => $order,
+            'status' => $status
+        ]);
     }
 }

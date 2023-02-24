@@ -30,7 +30,7 @@ return new class extends Migration
             $table->text('additional_information')->nullable();
             $table->float('freight_total')->nullable();
             $table->float('total')->comment('Produtos + Frete + Adicionais');
-            $table->foreignId('status_order_id')->constrained()->default(1);
+            $table->foreignId('status_order_id')->default(1)->constrained();
             // $table->enum('status', ['opened', 'preparation', 'transport', 'finished', 'canceled'])
             //         ->default('opened')
             //         ->comment('Aberto, Em preparação, Em transporte, Concluído, Cancelado');

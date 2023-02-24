@@ -25,6 +25,11 @@ class Order extends Model
         'additional_information',
         'freight_total',
         'total',
-        'status'
+        'status_order_id'
     ];
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }
