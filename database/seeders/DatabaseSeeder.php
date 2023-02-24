@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -25,7 +26,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             AdditionSeeder::class,
-            TimelineSeeder::class
+            TimelineSeeder::class,
+            StatusOrderSeeder::class
         ]);
 
         \App\Models\Product::factory(10)->create();
