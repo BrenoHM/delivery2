@@ -56,6 +56,8 @@ class ProfileController extends Controller
                 'neighborhood' => $request->neighborhood,
                 'state' => $request->state,
                 'city' => $request->city,
+                'type_pix_key' => $request->type_pix_key,
+                'pix_key' => $request->pix_key
             ]);
 
             foreach($request->timeline as $time){

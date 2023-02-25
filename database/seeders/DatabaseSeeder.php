@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             AdditionSeeder::class,
             TimelineSeeder::class,
-            StatusOrderSeeder::class
+            StatusOrderSeeder::class,
+            FreightSeeder::class
         ]);
 
         \App\Models\Product::factory(10)->create();

@@ -18,11 +18,14 @@ class CheckoutController extends Controller
         
         $isOpened = Timeline::isOpened($tenantId);
 
+        $havePix = Session::get('tenant')['type_pix_key'] ? true : false;
+
         return view('tenant.pages.checkout', [
             'cartItems' => $cartItems,
             'tenant' => $tenant,
             'freightDetails' => Session::get('freight_details'),
-            'isOpened' => $isOpened
+            'isOpened' => $isOpened,
+            'havePix' => $havePix
         ]);
     }
 

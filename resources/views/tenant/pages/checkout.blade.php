@@ -38,6 +38,9 @@
                           <option value="">Selecione</option>
                           <option value="money">Dinheiro</option>
                           <option value="card">Cartão</option>
+                          @if ($havePix)
+                            <option value="pix">Pix</option>
+                          @endif
                         </select>
                         @if($errors->has('payment_method'))
                           <div class="invalid-feedback d-block">{{ $errors->first('payment_method') }}</div>

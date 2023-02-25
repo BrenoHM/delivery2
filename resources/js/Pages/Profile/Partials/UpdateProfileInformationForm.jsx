@@ -50,6 +50,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         city: user.tenant?.city ?? "",
         state: user.tenant?.state ?? "",
         timeline: user.tenant?.timelines.length > 0 ? user.tenant?.timelines : "",
+        type_pix_key: user.tenant?.type_pix_key ?? "",
+        pix_key: user.tenant?.pix_key ?? ""
     });
 
     //before send data
@@ -315,6 +317,47 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                             </div>
                         ))}
+
+                        <header>
+                            <h2 className="text-lg font-medium text-gray-900">Chave Pix</h2>
+
+                            <p className="mt-1 text-sm text-gray-600">
+                                Configure sua chave caso queira receber via pix.
+                            </p>
+                        </header>
+
+                        <div>
+                            <InputLabel forInput="type_pix_key" value="Tipo Chave" />
+
+                            <select
+                                id="type_pix_key"
+                                className="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                onChange={(e) => setData('type_pix_key', e.target.value)}
+                                value={data.type_pix_key}
+                            >
+                                <option value="">Nenhum</option>
+                                <option value="cpf">CPF</option>
+                                <option value="email">Email</option>
+                                <option value="phone">Telefone</option>
+                                <option value="random">Aleatória</option>
+                            </select>
+
+                            <InputError className="mt-2" message={errors.type_pix_key} />
+                        </div>
+
+                        <div>
+                            <InputLabel forInput="pix_key" value="Valor Chave" />
+
+                            <TextInput
+                                id="pix_key"
+                                type="text"
+                                className="mt-1 block w-full"
+                                value={data.pix_key}
+                                handleChange={(e) => setData('pix_key', e.target.value)}
+                            />
+
+                            <InputError className="mt-2" message={errors.pix_key} />
+                        </div>
                             
                     </>
                 

@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('neighborhood')->nullable();
             $table->string('state')->nullable();
             $table->string('city')->nullable();
+            $table->enum('type_pix_key', ['cpf', 'email', 'phone', 'random'])->nullable();
+            $table->string('pix_key')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

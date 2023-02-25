@@ -20,7 +20,9 @@ class Tenant extends Model
         'number',
         'neighborhood',
         'state',
-        'city'
+        'city',
+        'type_pix_key',
+        'pix_key'
     ];
 
     public function user()

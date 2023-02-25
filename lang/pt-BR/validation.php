@@ -210,7 +210,9 @@ return [
         'category_id' => 'categoria',
         'photo' => 'foto',
         'categorie' => 'categoria',
-        'addition' => 'acréscimo'
+        'addition' => 'acréscimo',
+        'type_pix_key' => 'tipo chave',
+        'pix_key' => 'valor chave'
     ],
 
 ];

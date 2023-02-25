@@ -119,6 +119,13 @@ class OrderController extends Controller
                 ]
         ];
 
+        $typePix = [
+            'cpf' => 'CPF',
+            'phone' => 'Telefone',
+            'email' => 'Email',
+            'random' => 'Aleatória'
+        ];
+
         $status = StatusOrder::find([1,2,3,4])->toArray();
 
         foreach($status as $key => $value) {
@@ -131,7 +138,9 @@ class OrderController extends Controller
 
         return view('tenant.pages.order-information', [
             'order' => $order,
-            'status' => $status
+            'status' => $status,
+            'tenant' => Session::get('tenant'),
+            'typePix' => $typePix
         ]);
     }
 }

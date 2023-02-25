@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('tenant_id')->constrained();
             $table->string('name');
             $table->string('phone');
-            $table->enum('payment_method', ['money', 'card']);
+            $table->enum('payment_method', ['money', 'card', 'pix']);
             $table->enum('delivery_method', ['local', 'shipping']);
             $table->string('zip_code')->nullable();
             $table->string('street')->nullable();

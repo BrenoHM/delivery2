@@ -27,6 +27,14 @@ class ProfileUpdateRequest extends FormRequest
             $validations['domain'] = 'required|unique:tenants,domain,'.$this->tenant_id.',id,deleted_at,NULL';
         }
 
+        if( $this->type_pix_key ) {
+            $validations['pix_key'] = 'required';
+        }
+
+        if( $this->pix_key ) {
+            $validations['type_pix_key'] = 'required';
+        }
+
         return $validations;
     }
 

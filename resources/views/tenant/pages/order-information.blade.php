@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container order-information">
-        <h2 class="border-bottom mb-3">Informações sobre o pedido</h2>
+        <h2 class="border-bottom mb-3">Informações sobre o pedido - Nº #{{ $order->id }}</h2>
 
         <div class="card card-timeline px-2 border-none mb-3">
             <ul class="bs4-order-tracking"> 
@@ -27,9 +27,16 @@
                 
 
                 @if ($order->delivery_method == 'shipping')
-                    <p>{{ $order->street }}, {{ $order->number }}, {{ $order->complement }}, {{ $order->neighborhood }}</p>
+                    <p>
+                        {{ $order->street }}, {{ $order->number }}{{ $order->complement ? ', ' . $order->complement : '' }}, {{ $order->neighborhood }}<br>
+                        {{ $order->zip_code }} - {{ $order->city }}/{{ $order->state }}
+                    </p>
                 @else
-                    <p>Retirado no local</p>
+                    <p>
+                        <strong>Retirar no local:</strong><br>
+                        {{ $tenant->street }}, {{ $tenant->number }}{{ $tenant->complement ? ', ' . $tenant->complement : '' }}, {{ $tenant->neighborhood }}<br>
+                        {{ $tenant->zip_code }} - {{ $tenant->city }}/{{ $tenant->state }}
+                    </p>
                 @endif
             </div>
             <div class="col-md-6">
@@ -51,14 +58,33 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="text-end">Total do pedido</td>
-                        <td>R$ {{ number_format($order->total, 2, ",", ".") }}</td>
+                        <td><strong>R$ {{ number_format($order->total, 2, ",", ".") }}</strong></td>
                     </tr>
                     <tr>
                         <td colspan="2" class="text-end">Método de pagamento</td>
-                        <td>{{ $order->payment_method == 'money' ? 'Dinheiro' : 'Cartão' }}</td>
+                        <td>
+                            @if ($order->payment_method == 'money')
+                                Dinheiro
+                            @elseif($order->payment_method == 'card')
+                                Cartão
+                            @else
+                                Pix
+                            @endif
+                        </td>
                     </tr>
+                    @if ( $order->payment_method == 'pix' )
+                        <tr>
+                            <td colspan="2" class="text-end">Chave Pix: <strong>{{ $typePix[$tenant->type_pix_key] }}</strong></td>
+                            <td>{{ $tenant->pix_key }}</td>
+                        </tr>
+                    @endif
+                    @if ( $order->additional_information )
+                        <tr>
+                            <td colspan="2" class="text-end">Informação adicional</td>
+                            <td>{{ $order->additional_information }}</td>
+                        </tr>
+                    @endif
                 </table>
-                {{-- {{ $order->items }} --}}
             </div>
         </div>
     </div>
