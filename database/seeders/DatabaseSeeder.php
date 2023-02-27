@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             AdditionSeeder::class,
             TimelineSeeder::class,
             StatusOrderSeeder::class,
-            FreightSeeder::class
+            FreightSeeder::class,
+            VariationSeeder::class
         ]);
 
         \App\Models\Product::factory(10)->create();
