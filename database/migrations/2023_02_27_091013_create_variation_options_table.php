@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('variations', function (Blueprint $table) {
+        Schema::create('variation_options', function (Blueprint $table) {
             $table->id();
-            $table->string('variation');
+            $table->foreignId('variation_id')->constrained();
+            $table->string('option');
             $table->timestamps();
             $table->softDeletes();
-            $table->comment('Tabela de variações.');
+            $table->comment('Tabela de opções de variações.');
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variations');
+        Schema::dropIfExists('variation_options');
     }
 };

@@ -171,4 +171,31 @@ class ProductController extends Controller
     //     $product2->additions()->sync(array(1,2));
     //     dd('ok');
     // }
+
+    public function tb_variants()
+    {
+        $product = Product::find(1);
+
+        //na hora de inserir
+        // $product->variations()->createMany([
+        //     ['variation_option_id' => 1, 'price' => 20],
+        //     ['variation_option_id' => 2, 'price' => 40],
+        //     ['variation_option_id' => 3, 'price' => 50],
+        // ]);
+
+        //no update
+        // Delete
+        $product
+        ->variations()
+        ->whereNotIn('id', [1, 2])
+        ->delete();
+
+        $product->variations()->upsert([
+            ['id'=> 1, 'product_id' => 1, 'variation_option_id' => 1, 'price' => 25],
+            ['id'=> 2, 'product_id' => 1, 'variation_option_id' => 2, 'price' => 45],
+            ['id'=> null, 'product_id' => 1, 'variation_option_id' => 4, 'price' => 50],
+        ], ['id']);
+
+        dd('ok');
+    }
 }

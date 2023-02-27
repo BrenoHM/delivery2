@@ -27,4 +27,9 @@ class Product extends Model
     public function additions(){
         return $this->belongsToMany(Addition::class);
     }
+
+    public function variations(){
+        //return $this->belongsToMany(VariationOption::class)->whereNull('product_variation_option.deleted_at');
+        return $this->hasMany(ProductVariationOption::class);
+    }
 }

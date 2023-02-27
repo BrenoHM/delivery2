@@ -96,12 +96,13 @@ Route::domain(env('APP_URL'))->group(function () {
             });
         });
 
-        Route::get('tb', [ProductController::class, 'tb']);
     });
 
     require __DIR__.'/auth.php';
 
 });
+
+Route::get('tb', [ProductController::class, 'tb_variants']);
 
 //Rotas para tenants ficarão separadas
 Route::domain('{tenant}.' . env('APP_URL'))
