@@ -14,4 +14,8 @@ class VariationOption extends Model
         'variation_id',
         'option'
     ];
+
+    // public function opa(){
+    //     return $this->hasMany(ProductVariationOption::class);
+    // }
 }

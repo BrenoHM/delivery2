@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use App\Models\Addition;
+use App\Models\ProductVariationOption;
 use App\Models\Timeline;
 use Faker\Core\Uuid;
 use Illuminate\Http\Request;
@@ -29,6 +30,11 @@ class CartController extends Controller
         $additions = "";
         $price = $request->price;
 
+        // se for produto com variação
+        if( $request->variation_id ) {
+            $price = ProductVariationOption::find($request->variation_id)->price;
+        }
+
         if( isset($request->additions) && count($request->additions) > 0 ) {
             $additions = Addition::find($request->additions);
             if( $additions ) {
@@ -47,13 +53,12 @@ class CartController extends Controller
             'attributes' => array(
                 'product_id' => $request->id,
                 'additions' => $additions,
+                'variation_id' => $request->variation_id ?? null,
                 'photo' => $request->photo,
             ),
         ]);    
 
         // $cartItems = \Cart::get(50);
-
-        // dd($cartItems);
 
         //session()->flash('success', 'Product is Added to Cart Successfully !');
 

@@ -14,7 +14,7 @@
             </div>
             <div class="col-md-6 offset-md-1">
                 <h2>{{$product->name}}</h2>
-                <h3 class="price">R$ <span>{{ number_format($product->price,2,",",".") }}</span></h3>
+                <h3 class="price">R$ <span>{{ $product->variations->count() ? 'selecione uma opção' : number_format($product->price,2,",",".") }}</span></h3>
                 <p>{{$product->description}}</p>
 
                 @if ($isOpened)
@@ -30,6 +30,22 @@
                                     </label>
                                 </div>
                             @endforeach
+                        @endif
+
+                        {{-- variations --}}
+                        @if ($product->variations->count())
+                            <div class="row">
+                                <div class="col-5 mb-2">
+                                    <select name="variation_id" id="variation_id" class="col-md-3 form-control" onchange="calculateProduct()" required>
+                                        <option value="">Selecione a opção</option>
+                                        @foreach ($product->variations as $variation)
+                                            <option value="{{ $variation->id }}" data-price="{{ $variation->price }}">
+                                                {{ $variation->option->option }} - {{ number_format($variation->price, 2, ",", ".") }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         @endif
 
                         <div class="col-3">
@@ -58,7 +74,12 @@
 
         const calculateProduct = () => {
 
-            let total = parseFloat($('#priceProduct').val());
+            var total = 0;
+            if( $("#variation_id :selected").val() ) {
+                total = parseFloat($("#variation_id :selected").data('price'));
+            }else{
+                total = parseFloat($('#priceProduct').val());
+            }
 
             $('.addition').each(function(){
                 const checked = $(this).is(':checked');
@@ -71,7 +92,11 @@
         }
 
         $( document ).ready(function() {
-        
+            // if( $("#variation_id").length > 0 ){
+            //     alert($("#variation_id :selected").val());
+            // }else{
+            //     alert('nao tem variation')
+            // }
         });
 
     </script>

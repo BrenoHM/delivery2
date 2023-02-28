@@ -20,6 +20,15 @@ class ProductVariationOption extends Model
         'id',
         'product_id',
         'variation_option_id',
-        'price'
+        'price',
+        'option'
     ];
+
+    public function option(){
+        return $this->belongsTo(VariationOption::class, 'variation_option_id');
+    }
+
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
 }

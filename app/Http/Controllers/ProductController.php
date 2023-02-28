@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUpdateProductRequest;
 use App\Models\Addition;
 use App\Models\Product;
+use App\Models\ProductVariationOption;
 use App\Models\Timeline;
 use App\Models\Variation;
 use App\Models\VariationOption;
@@ -59,8 +60,6 @@ class ProductController extends Controller
 
     public function store(StoreUpdateProductRequest $request)
     {
-
-        //dd($request->all());
         
         $data = $request->all();
 
@@ -94,6 +93,10 @@ class ProductController extends Controller
 
     public function show($tenant, Product $product)
     {
+
+        //return Product::with(['additions', 'variations', 'variations.option'])->where('id', $product->id)->get();
+        //return ProductVariationOption::with('option')->get();
+        //return $product->load('additions')->load('variations')->load('variations.option');
         $tenantId = config('tenant.id');
 
         if( $product->tenant_id !== $tenantId ){
@@ -102,8 +105,10 @@ class ProductController extends Controller
 
         $isOpened = Timeline::isOpened($tenantId);
 
+        //return $product->load(['additions', 'variations', 'variations.option']);
+
         return view('tenant.pages.show', [
-            'product' => $product->load('additions'),
+            'product' => $product->load(['additions', 'variations', 'variations.option']),
             'tenant' => $tenant,
             'isOpened' => $isOpened
         ]);
