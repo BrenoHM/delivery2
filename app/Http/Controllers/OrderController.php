@@ -6,7 +6,9 @@ use App\Models\AdditionOrderItem;
 use App\Models\LogStatusOrder;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductVariationOption;
 use App\Models\StatusOrder;
+use App\Models\VariationOrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -78,6 +80,14 @@ class OrderController extends Controller
                             'total' => $addition->price,
                         ]);
                     }
+                }
+                if( $item->attributes->variation_id ) {
+                    $total = ProductVariationOption::find($item->attributes->variation_id)->price;
+                    VariationOrderItem::create([
+                        'order_item_id' => $newOrderItem->id,
+                        'product_variation_option_id' => $item->attributes->variation_id,
+                        'total' => $total
+                    ]);
                 }
             }
 

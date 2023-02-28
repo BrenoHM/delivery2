@@ -29,7 +29,11 @@
                                 @endif
                             </td>
                             <td class="align-middle">
-                                {{$item->name}}
+                                {{ $item->name }}
+                                @if ( $item->attributes->variation_description )
+                                    <br />
+                                    <strong>{{ $item->attributes->variation_description }}</strong>
+                                @endif
                             </td>
                             <td class="align-middle">
                                 @if ($item->attributes->additions)

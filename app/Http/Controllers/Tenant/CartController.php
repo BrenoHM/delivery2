@@ -32,7 +32,8 @@ class CartController extends Controller
 
         // se for produto com variação
         if( $request->variation_id ) {
-            $price = ProductVariationOption::find($request->variation_id)->price;
+            $productVariationOption = ProductVariationOption::with('option')->find($request->variation_id);
+            $price = $productVariationOption->price;
         }
 
         if( isset($request->additions) && count($request->additions) > 0 ) {
@@ -54,6 +55,7 @@ class CartController extends Controller
                 'product_id' => $request->id,
                 'additions' => $additions,
                 'variation_id' => $request->variation_id ?? null,
+                'variation_description' => $productVariationOption->option->option ?? null,
                 'photo' => $request->photo,
             ),
         ]);    
