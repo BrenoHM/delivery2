@@ -15,4 +15,11 @@ class ProductVariationOption extends Model
         'variation_option_id',
         'price'
     ];
+
+    protected $visible = [
+        'id',
+        'product_id',
+        'variation_option_id',
+        'price'
+    ];
 }

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUpdateProductRequest;
 use App\Models\Addition;
 use App\Models\Product;
 use App\Models\Timeline;
+use App\Models\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
@@ -40,13 +41,19 @@ class ProductController extends Controller
     {
         $additions = Addition::where('tenant_id', Auth::user()->tenant_id)->get();
 
+        $variationOptions = Variation::with('options')->get();
+
         return Inertia::render('Client/Products/Create', [
-            'additions' => $additions
+            'additions' => $additions,
+            'variationOptions' => $variationOptions,
+            'action' => 'Salvar'
         ]);
     }
 
     public function store(StoreUpdateProductRequest $request)
     {
+
+        //dd($request->all());
         
         $data = $request->all();
 
@@ -63,9 +70,15 @@ class ProductController extends Controller
         $product = Product::create($data);
 
         if( $product ) {
+
             if( $request->additions ) {
                 $product->additions()->attach($request->additions);
             }
+
+            if( $request->variations ) {
+                $product->variations()->createMany($request->variations);
+            }
+
         }
 
         return Redirect::route('client.products')->with('message', 'Produto Cadastrado com sucesso!');
@@ -116,10 +129,14 @@ class ProductController extends Controller
             }
         }
 
+        $variationOptions = Variation::with('options')->get();
+
         return Inertia::render('Client/Products/Edit', [
             'product' => $product,
             'additions' => $add,
             'idsAdditions' => $ids,
+            'variationOptions' => $variationOptions,
+            'variations' => json_decode($product->variations->toJson()),
             'action' => 'Editar'
         ]);
     }
@@ -131,7 +148,7 @@ class ProductController extends Controller
         
         $builderProduct = $product->first();
 
-        $data = $request->except(['photo', 'additions']);
+        $data = $request->except(['photo', 'additions', 'variations']);
 
         if( $request->photo ){
             $path = Storage::put('', $request->photo, 'public');

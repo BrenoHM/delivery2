@@ -13,7 +13,8 @@ export default function Create(props) {
         category_id: '',
         photo: '',
         price: '',
-        additions: []
+        additions: [],
+        variations: []
     });
 
     useEffect(() => {
@@ -31,7 +32,7 @@ export default function Create(props) {
         post(route('products.store'));
     }
 
-    const onChangeField = (field, value) => {
+    const onChangeField = (field, value, actionFunction = null, index = null) => {
         if(field == 'additions'){
             let additions = data[field];
             if( value.checked ) {
@@ -42,6 +43,20 @@ export default function Create(props) {
                 additions = additions.filter(addition => addition != value.value);
                 setData(field, additions);
             }
+        }else if(field == 'variations'){
+            let variations = data[field];
+            if( actionFunction == 'insert' ){
+                
+                variations.push({
+                    variation_option_id: value.variation_option_id,
+                    price: value.price
+                })
+                
+            }else if( actionFunction == 'delete' ){
+                variations = variations.splice(index, 1);
+            }
+            setData(field, variations);
+            
         }else{
             setData(field, value);
         }
@@ -57,6 +72,7 @@ export default function Create(props) {
                     onChangeField={onChangeField}
                     errors={errors}
                     processing={processing}
+                    action={props.action}
                     props={props}
                 />            
         </ClientScreen>

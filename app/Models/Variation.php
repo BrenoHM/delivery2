@@ -13,4 +13,9 @@ class Variation extends Model
     protected $fillable = [
         'variation'
     ];
+
+    public function options()
+    {
+        return $this->hasMany(VariationOption::class);
+    }
 }

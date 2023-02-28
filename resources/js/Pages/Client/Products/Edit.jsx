@@ -13,7 +13,8 @@ export default function Edit(props) {
         category_id: props.product.category_id,
         photo: '',
         price: props.product.price,
-        additions: props.idsAdditions
+        additions: props.idsAdditions,
+        variations: props.variations
     });
 
     useEffect(() => {
@@ -32,7 +33,7 @@ export default function Edit(props) {
         post(route('products.update', props.product.id));
     }
 
-    const onChangeField = (field, value) => {
+    const onChangeField = (field, value, actionFunction = null, index = null) => {
         if(field == 'additions'){
             let additions = data[field];
             if( value.checked ) {
@@ -43,6 +44,22 @@ export default function Edit(props) {
                 additions = additions.filter(addition => addition != value.value);
                 setData(field, additions);
             }
+        }else if(field == 'variations'){
+            let variations = data[field];
+            if( actionFunction == 'insert' ){
+                
+                variations.push({
+                    id: null,
+                    product_id: props.product.id,
+                    variation_option_id: value.variation_option_id,
+                    price: value.price
+                })
+                
+            }else if( actionFunction == 'delete' ){
+                variations.splice(index, 1);
+            }
+            setData(field, variations);
+            
         }else{
             setData(field, value);
         }
