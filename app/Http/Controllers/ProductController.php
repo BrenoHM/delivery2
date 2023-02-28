@@ -7,6 +7,7 @@ use App\Models\Addition;
 use App\Models\Product;
 use App\Models\Timeline;
 use App\Models\Variation;
+use App\Models\VariationOption;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
@@ -41,11 +42,17 @@ class ProductController extends Controller
     {
         $additions = Addition::where('tenant_id', Auth::user()->tenant_id)->get();
 
+        $variationNames = collect(VariationOption::get()->toArray())->mapWithKeys(function (array $item, int $key) {
+            return [$item['id'] => $item['option']];
+        });
+
         $variationOptions = Variation::with('options')->get();
+        return($variationOptions);
 
         return Inertia::render('Client/Products/Create', [
             'additions' => $additions,
             'variationOptions' => $variationOptions,
+            'variationNames' => $variationNames->all(),
             'action' => 'Salvar'
         ]);
     }
@@ -129,12 +136,17 @@ class ProductController extends Controller
             }
         }
 
+        $variationNames = collect(VariationOption::get()->toArray())->mapWithKeys(function (array $item, int $key) {
+            return [$item['id'] => $item['option']];
+        });
+
         $variationOptions = Variation::with('options')->get();
 
         return Inertia::render('Client/Products/Edit', [
             'product' => $product,
             'additions' => $add,
             'idsAdditions' => $ids,
+            'variationNames' => $variationNames,
             'variationOptions' => $variationOptions,
             'variations' => json_decode($product->variations->toJson()),
             'action' => 'Editar'
@@ -143,8 +155,10 @@ class ProductController extends Controller
 
     public function update(StoreUpdateProductRequest $request, $id)
     {
+
+        //dd($request->all());
         
-        $product = Product::where('id', $id);
+        $product = Product::with('variations')->where('id', $id);
         
         $builderProduct = $product->first();
 
@@ -162,8 +176,17 @@ class ProductController extends Controller
             }
         }
 
+        $idsVariations = $request->variations ? collect($request->variations)->pluck('id')->toArray() : [];
+
         if( $product->update($data) ) {
             $builderProduct->additions()->sync($request->additions);
+
+            $builderProduct->variations()->whereNotIn('id', $idsVariations)->delete();
+
+            if( $request->variations ) {
+                $builderProduct->variations()->upsert($request->variations, ['id']);
+            }
+            
         }
 
         return Redirect::route('client.products')->with('message', 'Produto Atualizado com sucesso!');

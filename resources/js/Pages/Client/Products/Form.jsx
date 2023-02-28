@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 export default function Form({categories, submit, onChangeField, errors, processing, data, action, props}) {
 
-    const [variations, setVariations] = useState(props.variations ?? []);
+    const [variations, setVariations] = useState(data?.variations ?? []);
     const [variation_option_id, setVariationOptionId] = useState('');
     const [price, setPrice] = useState('');
     const {primaryColor, secondaryColor} = props.auth.user.tenant;
@@ -17,6 +17,7 @@ export default function Form({categories, submit, onChangeField, errors, process
         if ( (variation_option_id && price) || actionFunction ) {
 
             var aux = variations;
+            
             if( actionFunction == 'insert' ){
                 if(action == 'Salvar'){
                     aux.push({
@@ -25,7 +26,9 @@ export default function Form({categories, submit, onChangeField, errors, process
                     });
                 }
             }else if(actionFunction == 'delete') {
-                aux.splice(index, 1);
+                if(action == 'Salvar'){
+                    aux.splice(index, 1);
+                }
             }
             
             setVariations(aux);
@@ -188,7 +191,6 @@ export default function Form({categories, submit, onChangeField, errors, process
                     </button>
                 </div>
             </div>
-
             <div className="flex flex-wrap -mx-3 mb-6">
                 <div className="w-full px-3 mb-6 md:mb-0">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -199,14 +201,14 @@ export default function Form({categories, submit, onChangeField, errors, process
                             <tr>
                                 <td className='px-6 py-3'>Variação</td>
                                 <td className='px-6 py-3'>Preço</td>
-                                <td className='px-6 py-3'>Excluir </td>
+                                <td className='px-6 py-3 text-center'>Excluir </td>
                             </tr>
                         </thead>
                         <tbody>
                             { variations && variations.map((variation, i) => (
                                 <tr key={i}>
-                                    <td className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center'>{variation.variation_option_id}</td>
-                                    <td className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center'>R$ {variation.price}</td>
+                                    <td className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>{props.variationNames[variation.variation_option_id]}</td>
+                                    <td className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>R$ {variation.price}</td>
                                     <td className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-center'>
                                         <button
                                             onClick={() => addVariation('delete', action, i)}

@@ -58,6 +58,7 @@ export default function Edit(props) {
             }else if( actionFunction == 'delete' ){
                 variations.splice(index, 1);
             }
+            
             setData(field, variations);
             
         }else{
