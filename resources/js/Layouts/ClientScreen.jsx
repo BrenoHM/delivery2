@@ -7,7 +7,8 @@ import {
   RiDashboardLine,
   RiAddCircleLine,
   RiShoppingCart2Line,
-  RiGridFill
+  RiGridFill,
+  RiListOrdered
 } from "react-icons/ri";
 
 export default function ClientScreen(props) {
@@ -35,6 +36,11 @@ export default function ClientScreen(props) {
                             <div className="mb-5">
                               <NavLink href={route('clientDashboard')} active={route().current('clientDashboard')}>
                                 <RiDashboardLine size={20} className="mr-2" /> Dashboard
+                              </NavLink>
+                            </div>
+                            <div className="mb-5">
+                              <NavLink href={route('order.index')} active={route().current('order.index')}>
+                                <RiListOrdered size={20} className="mr-2" /> Pedidos
                               </NavLink>
                             </div>
                             <div className="mb-5">

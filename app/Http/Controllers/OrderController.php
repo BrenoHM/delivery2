@@ -10,11 +10,23 @@ use App\Models\ProductVariationOption;
 use App\Models\StatusOrder;
 use App\Models\VariationOrderItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
+    public function index(Request $request)
+    {
+        if( $request->json ) {
+            $orders = Order::with('items')->where('tenant_id', Auth::user()->tenant_id)->get();
+
+            return $orders;
+        }
+        return Inertia::render('Client/Order/Index', []);
+    }
+
     public function store($tenant, Request $request)
     {
         $validations = [

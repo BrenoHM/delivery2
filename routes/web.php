@@ -9,7 +9,8 @@ use App\Http\Controllers\{
     ProductController,
     CategoryController,
     AdditionController,
-    FreightController
+    FreightController,
+    OrderController
 };
 
 /*
@@ -57,6 +58,10 @@ Route::domain(env('APP_URL'))->group(function () {
             
             Route::prefix('client')->group(function () {
                 Route::inertia('/dashboard', 'Client/Dashboard')->name('clientDashboard');
+
+                Route::prefix('orders')->group(function () {
+                    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+                });
 
                 Route::prefix('products')->group(function () {
                     Route::get('/', [ProductController::class, 'index'])->name('client.products');
