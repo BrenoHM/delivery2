@@ -1,8 +1,9 @@
 import { paymentMethod } from '@/helper';
+import { useEffect } from 'react';
 import { RiWhatsappLine } from "react-icons/ri";
 
-export default function OrderDetail({ data, index, handleChangeOrderStatus }) {
-
+export default function OrderDetail({ data, index, handleChangeOrderStatus, toogleOpened }) { 
+    
     return (
         <>
             { data.additional_information && (
@@ -11,9 +12,9 @@ export default function OrderDetail({ data, index, handleChangeOrderStatus }) {
                     <p>Informação adicional: { data.additional_information }</p>
                 </div>
             ) }
-            <div className="grid grid-cols-[40%,60%] p-5">
+            <div className="border grid grid-cols-[40%,60%] p-5">
                 <div className="w-25">
-                    <h3><strong>Endereço de entrega {index}</strong></h3>
+                    <h3><strong>Endereço de entrega</strong></h3>
                     <p className='flex'>
                         <span className='mr-1'>{ data.name }</span>- 
                         <a target='_blank' title='Enviar Whatsapp' href={`https://wa.me/+55${data.phone.replace(/[() -]/g, '')}?text=Olá%20gostaria%20de%20falar%20sobre%20seu%20pedido.`} className='flex items-center'>
@@ -71,12 +72,14 @@ export default function OrderDetail({ data, index, handleChangeOrderStatus }) {
                             <tr>
                                 <td className="text-right px-6 py-3" colSpan={4}>Mudar Status</td>
                                 <td className='px-6 py-3'>
-                                    <select onChange={(e) => handleChangeOrderStatus(data.id, index, e.target.value)} value={data.status_order_id}>
-                                        <option value="1">Aberto</option>
-                                        <option value="2">Em preparação</option>
-                                        <option value="3">Em transporte</option>
-                                        <option value="4">Concluído</option>
-                                        <option value="5">Cancelado</option>
+                                    <select
+                                        className="appearance-none bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 mb-3 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                        onChange={(e) => handleChangeOrderStatus(data.id, index, e.target.value)} value={data.status_order_id}>
+                                        { data.status_order_id == 1 && <option value="1">Aberto</option> }
+                                        { (data.status_order_id == 1 || data.status_order_id == 2) && <option value="2">Em preparação</option> }
+                                        { (data.status_order_id == 2 || data.status_order_id == 3) && <option value="3">Em transporte</option>}
+                                        { (data.status_order_id == 3 || data.status_order_id == 4) && <option value="4">Concluído</option>}
+                                        { (data.status_order_id == 1 || data.status_order_id == 5) && <option value="5">Cancelado</option>}
                                     </select>
                                 </td>
                             </tr>

@@ -22,14 +22,6 @@ export default function Index(props) {
 
     const filteredItems = filterText ? item.filter(item => item.id == filterText) : item;
 
-    // const handleButtonDelete = (e, id) => {
-    //     e.preventDefault();
-    //     modalExcluded(async () => {
-    //         const result = await axios.delete(route('products.destroy', id));
-    //         fetchProducts(actualPage);
-    //     });
-    // }
-
 	const fetchOrders = async () => {
 
         setLoading(true);
@@ -52,6 +44,10 @@ export default function Index(props) {
 
     useEffect(() => {
         fetchOrders();
+        //consult orders per minutes
+        setInterval(function () {
+            fetchOrders();
+        }, 60000);
 	}, []);
 
     const columns = [
@@ -62,6 +58,10 @@ export default function Index(props) {
         {
             name: 'Nome',
             selector: row => row.name,
+        },
+        {
+            name: 'Data',
+            selector: row => row.created_at,
         },
         {
             name: 'Total',

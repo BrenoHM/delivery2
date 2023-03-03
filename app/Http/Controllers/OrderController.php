@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\ProductVariationOption;
 use App\Models\StatusOrder;
 use App\Models\VariationOrderItem;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,7 @@ class OrderController extends Controller
                                     'items.variation.product_variation',
                                     'items.variation.product_variation.option'])
                             ->where('tenant_id', Auth::user()->tenant_id)
+                            ->where('created_at', '>=', Carbon::today())
                             ->get();
 
             return $orders;
@@ -159,6 +161,8 @@ class OrderController extends Controller
 
         $status = StatusOrder::find([1,2,3,4])->toArray();
 
+        $canceled = LogStatusOrder::where('order_id', $order->id)->where('status_order_id', 5)->orderBy('id', 'desc')->first();
+
         foreach($status as $key => $value) {
             $exist = LogStatusOrder::where('order_id', $order->id)->where('status_order_id', $value['id'])->orderBy('id', 'desc')->first();
             $status[$key]['label'] = $statusLabel['label'][$value['id']];
@@ -171,7 +175,8 @@ class OrderController extends Controller
             'order' => $order,
             'status' => $status,
             'tenant' => Session::get('tenant'),
-            'typePix' => $typePix
+            'typePix' => $typePix,
+            'canceled' => $canceled
         ]);
     }
 

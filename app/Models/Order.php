@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DateTimeInterface;
 
 class Order extends Model
 {
@@ -27,6 +28,13 @@ class Order extends Model
         'total',
         'status_order_id'
     ];
+
+    
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('d/m/Y H:i');
+    }
 
     public function items()
     {
