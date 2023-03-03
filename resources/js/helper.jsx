@@ -45,6 +45,19 @@ export const CustomLoader = () => {
     )
 }
 
+export const paymentMethod = {
+  "money": "Dinheiro",
+  "card": "Cartão",
+}
+
+export const statusOrder = {
+  "1": "Aberto",
+  "2": "Em preparação",
+  "3": "Em transporte",
+  "4": "Concluído",
+  "5": "Cancelado"
+}
+
 export const dayOfWeek = [
   null,
   'Domingo',

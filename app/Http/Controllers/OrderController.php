@@ -20,7 +20,16 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if( $request->json ) {
-            $orders = Order::with('items')->where('tenant_id', Auth::user()->tenant_id)->get();
+            $orders = Order::with(['items',
+                                    'status',
+                                    'items.product',
+                                    'items.additions',
+                                    'items.variation',
+                                    'items.additions.addition',
+                                    'items.variation.product_variation',
+                                    'items.variation.product_variation.option'])
+                            ->where('tenant_id', Auth::user()->tenant_id)
+                            ->get();
 
             return $orders;
         }
@@ -164,5 +173,28 @@ class OrderController extends Controller
             'tenant' => Session::get('tenant'),
             'typePix' => $typePix
         ]);
+    }
+
+    public function changeStatus(Order $order, $status_order_id)
+    {
+        
+        $result = DB::transaction(function () use ($order, $status_order_id) {
+            $update = $order->update([
+                'status_order_id' => $status_order_id
+            ]);
+
+            //create new log status order
+            $logged = LogStatusOrder::create([
+                'order_id' => $order->id,
+                'status_order_id' => $status_order_id
+            ]);
+
+            return $update;
+        });
+
+        return [
+            'success' => $result ? true : false,
+            'message' => $result ? 'Status Alterado!' : 'Erro ao alterar status'
+        ];
     }
 }

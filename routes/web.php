@@ -61,6 +61,7 @@ Route::domain(env('APP_URL'))->group(function () {
 
                 Route::prefix('orders')->group(function () {
                     Route::get('/', [OrderController::class, 'index'])->name('order.index');
+                    Route::patch('/{order}/{status_order_id}', [OrderController::class, 'changeStatus'])->name('order.changeStatus');
                 });
 
                 Route::prefix('products')->group(function () {

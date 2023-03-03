@@ -14,4 +14,9 @@ class VariationOrderItem extends Model
         'product_variation_option_id',
         'total'
     ];
+
+    public function product_variation()
+    {
+        return $this->belongsTo(ProductVariationOption::class, 'product_variation_option_id');
+    }
 }

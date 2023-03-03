@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { modalExcluded, CustomLoader } from '@/helper';
 import FilterComponent from '@/Components/FilterComponent';
 import OrderDetail from '@/Components/OrderDetail';
+import BadgeStatus from '@/Components/BadgeStatus';
 
 export default function Index(props) {
 
@@ -13,59 +14,33 @@ export default function Index(props) {
     const {primaryColor, secondaryColor} = props.auth.user.tenant;
     const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [totalRows, setTotalRows] = useState(0);
-	const [perPage, setPerPage] = useState(10);
-    const [actualPage, setActualPage] = useState(1);
-
     const [filterText, setFilterText] = useState('');
-	const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
 
-	// const filteredItems = data.filter(
-	// 	item => item.id == filterText,
-	// );
+    const item = data.map((d, i) => {
+        return { ...d, index: i };
+    });
 
-    const filteredItems = filterText ? data.filter(item => item.id == filterText) : data;
+    const filteredItems = filterText ? item.filter(item => item.id == filterText) : item;
 
-    const handleButtonDelete = (e, id) => {
-        e.preventDefault();
-        modalExcluded(async () => {
-            const result = await axios.delete(route('products.destroy', id));
-            fetchProducts(actualPage);
-        });
-    }
+    // const handleButtonDelete = (e, id) => {
+    //     e.preventDefault();
+    //     modalExcluded(async () => {
+    //         const result = await axios.delete(route('products.destroy', id));
+    //         fetchProducts(actualPage);
+    //     });
+    // }
 
-	const fetchProducts = async (page) => {
+	const fetchOrders = async () => {
 
         setLoading(true);
-
-        const response = await axios.get(route('order.index', {json: true, page, per_page: perPage, term: filterText}));
-
+        const response = await axios.get(route('order.index', {json: true}));
 		setData(response.data);
-        console.log(filteredItems);
-		setTotalRows(response.data.total);
-        setActualPage(page);
 		setLoading(false);
 	};
-
-    // const handlePageChange = page => {
-	// 	fetchProducts(page);
-	// };
-
-	// const handlePerRowsChange = async (newPerPage, page) => {
-	// 	setLoading(true);
-
-    //     const response = await axios.get(route('client.products', {json: true, page, per_page: newPerPage, term: filterText}));
-
-	// 	setData(response.data.data);
-	// 	setPerPage(newPerPage);
-    //     setActualPage(page);
-	// 	setLoading(false);
-	// };
 
     const subHeaderComponentMemo = useMemo(() => {
 		const handleClear = () => {
 			if (filterText) {
-				setResetPaginationToggle(!resetPaginationToggle);
 				setFilterText('');
 			}
 		};
@@ -73,17 +48,13 @@ export default function Index(props) {
 		return (
 			<FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />
 		);
-	}, [filterText, resetPaginationToggle]);
+	}, [filterText]);
 
     useEffect(() => {
-        fetchProducts(actualPage); // fetch page 1 of products
+        fetchOrders();
 	}, []);
 
     const columns = [
-        // {
-        //     name: 'Foto',
-        //     selector: row => <img width={80} src={row.photo} />,
-        // },
         {
             name: 'Pedido N°',
             selector: row => '#'+row.id,
@@ -92,38 +63,30 @@ export default function Index(props) {
             name: 'Nome',
             selector: row => row.name,
         },
-        // {
-        //     name: 'Categoria',
-        //     selector: row => row.category.categorie,
-        // },
         {
             name: 'Total',
-            selector: row => row.total.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}),
+            selector: row => row.total.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'}),
         },
-        {		
-            //cell: (row) => <button onClick={() => handleButtonClick(row.id)}><BiPencil size={20} /></button>,
-            cell: (row) => <Link href={route('products.edit', row.id)}><BiPencil size={20} /></Link>,
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
-        },
-        {		
-            //cell: (row) => <button onClick={() => handleButtonClick(row.id)}><BiTrash size={20} /></button>,
-            cell: (row) => <Link onClick={(e) => handleButtonDelete(e, row.id)}><BiTrash size={20} /></Link>,
-            ignoreRowClick: true,
-            allowOverflow: true,
-            button: true,
+        {
+            name: 'Status',
+            selector: row => <BadgeStatus status={row.status_order_id} />,
         },
     ];
 
-    // const paginationComponentOptions = {
-    //     rowsPerPageText: 'Filas por página',
-    //     rangeSeparatorText: 'de',
-    //     selectAllRowsItem: true,
-    //     selectAllRowsItemText: 'Todos',
-    // };
+    const changeStatus = async (id, i, value) => {
+        try {
 
-    //const ExpandedComponent = ({ data }) => <pre>{JSON.stringify(data, null, 2)}</pre>;
+            const result = await axios.patch(route('order.changeStatus', { order: id, status_order_id: value }));
+            if( result.data.success ) {
+                filteredItems[i].status_order_id = value;
+                setData(filteredItems)
+            }
+            
+        } catch (error) {
+            alert('Erro ao alterar status.');
+        }
+        
+    }
 
     return (
         <ClientScreen {...props}>
@@ -134,20 +97,13 @@ export default function Index(props) {
                 noDataComponent="Não há pedidos para exibir"
                 columns={columns}
                 data={filteredItems}
-                // progressPending={loading}
-                // pagination
-                // paginationComponentOptions={paginationComponentOptions}
-                // paginationServer
-                // paginationTotalRows={totalRows}
-                // onChangeRowsPerPage={handlePerRowsChange}
-                // onChangePage={handlePageChange}
+                progressPending={loading}
                 striped
                 subHeader
                 subHeaderComponent={subHeaderComponentMemo}
-                paginationResetDefaultPage={resetPaginationToggle}
                 progressComponent={<CustomLoader />}
                 expandableRows
-                expandableRowsComponent={OrderDetail}
+                expandableRowsComponent={({data}) => <OrderDetail data={data} index={data.index} handleChangeOrderStatus={changeStatus} />}
             />            
         </ClientScreen>
     );

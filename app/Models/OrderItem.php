@@ -20,4 +20,14 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function additions()
+    {
+        return $this->hasMany(AdditionOrderItem::class);
+    }
+
+    public function variation()
+    {
+        return $this->hasOne(VariationOrderItem::class);
+    }
 }
