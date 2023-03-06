@@ -212,7 +212,8 @@ return [
         'categorie' => 'categoria',
         'addition' => 'acréscimo',
         'type_pix_key' => 'tipo chave',
-        'pix_key' => 'valor chave'
+        'pix_key' => 'valor chave',
+        'logo' => 'logomarca'
     ],
 
 ];

@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -45,8 +46,8 @@ class ProfileController extends Controller
         $request->user()->save();
 
         if($request->user()->role == 'client') {
-            //update in tenant
-            $request->user()->tenant()->update([
+
+            $data = [
                 'domain' => $request->domain,
                 'primaryColor' => $request->primaryColor,
                 'secondaryColor' => $request->secondaryColor,
@@ -58,7 +59,17 @@ class ProfileController extends Controller
                 'city' => $request->city,
                 'type_pix_key' => $request->type_pix_key,
                 'pix_key' => $request->pix_key
-            ]);
+            ];
+
+            if( $request->logo ) {
+                $path = Storage::put('tenants/'.$request->tenant_id.'/logo', $request->logo, 'public');
+                if( $path ) {
+                    $data['logo'] = env('AWS_URL') . '/' . $path;
+                }
+            }
+
+            //update in tenant
+            $request->user()->tenant()->update($data);
 
             foreach($request->timeline as $time){
                 Timeline::updateOrCreate([

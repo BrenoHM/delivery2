@@ -35,7 +35,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         const {primaryColor, secondaryColor} = user.tenant;
     }
 
-    const { data, setData, transform, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, transform, post, errors, processing, recentlySuccessful } = useForm({
         id: user.id,
         name: user.name,
         email: user.email,
@@ -51,7 +51,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         state: user.tenant?.state ?? "",
         timeline: user.tenant?.timelines.length > 0 ? user.tenant?.timelines : "",
         type_pix_key: user.tenant?.type_pix_key ?? "",
-        pix_key: user.tenant?.pix_key ?? ""
+        pix_key: user.tenant?.pix_key ?? "",
+        logo: ''
     });
 
     //before send data
@@ -70,7 +71,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     const submit = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'));
+        post(route('profile.update'));
     };
 
     const searchCep = value => {
@@ -120,7 +121,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 </p>
             </header>
 
-            <form onSubmit={submit} className="mt-6 space-y-6">
+            <form onSubmit={submit} className="mt-6 space-y-6" encType="multipart/form-data">
                 <div>
                     <InputLabel forInput="name" value="Nome" />
 
@@ -357,6 +358,18 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                             />
 
                             <InputError className="mt-2" message={errors.pix_key} />
+                        </div>
+
+                        <div>
+                            <InputLabel forInput="logo" value="Logomarca" />
+
+                            <TextInput
+                                id="logo"
+                                type="file"
+                                handleChange={(e) => setData('logo', e.target.files[0])}
+                            />
+
+                            <InputError className="mt-2" message={errors.logo} />
                         </div>
                             
                     </>
