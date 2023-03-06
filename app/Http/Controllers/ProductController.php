@@ -48,7 +48,6 @@ class ProductController extends Controller
         });
 
         $variationOptions = Variation::with('options')->get();
-        return($variationOptions);
 
         return Inertia::render('Client/Products/Create', [
             'additions' => $additions,
@@ -67,7 +66,7 @@ class ProductController extends Controller
 
         //$request->photo->store('.');
         if( $request->photo ) {
-            $path = Storage::put('', $request->photo, 'public');
+            $path = Storage::put('tenants/'.Auth::user()->tenant_id.'/products', $request->photo, 'public');
             if( $path ) {
                 $data['photo'] = env('AWS_URL') . '/' . $path;
             }
@@ -94,9 +93,6 @@ class ProductController extends Controller
     public function show($tenant, Product $product)
     {
 
-        //return Product::with(['additions', 'variations', 'variations.option'])->where('id', $product->id)->get();
-        //return ProductVariationOption::with('option')->get();
-        //return $product->load('additions')->load('variations')->load('variations.option');
         $tenantId = config('tenant.id');
 
         if( $product->tenant_id !== $tenantId ){
@@ -104,8 +100,6 @@ class ProductController extends Controller
         }
 
         $isOpened = Timeline::isOpened($tenantId);
-
-        //return $product->load(['additions', 'variations', 'variations.option']);
 
         return view('tenant.pages.show', [
             'product' => $product->load(['additions', 'variations', 'variations.option']),
@@ -170,14 +164,14 @@ class ProductController extends Controller
         $data = $request->except(['photo', 'additions', 'variations']);
 
         if( $request->photo ){
-            $path = Storage::put('', $request->photo, 'public');
+            $path = Storage::put('tenants/'.Auth::user()->tenant_id.'/products', $request->photo, 'public');
             if( $path ) {
                 $data['photo'] = env('AWS_URL') . '/' . $path;
             }
             if( $builderProduct->photo ) {
                 $arrayHttpImage = explode("/", $builderProduct->photo);
                 $imageOld = end($arrayHttpImage);
-                Storage::delete($imageOld);
+                Storage::delete('tenants/'.Auth::user()->tenant_id.'/products/'.$imageOld);
             }
         }
 

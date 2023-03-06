@@ -68,6 +68,13 @@ class ProfileController extends Controller
                 }
             }
 
+            if( $request->banner ) {
+                $path = Storage::put('tenants/'.$request->tenant_id.'/banner', $request->banner, 'public');
+                if( $path ) {
+                    $data['banner'] = env('AWS_URL') . '/' . $path;
+                }
+            }
+
             //update in tenant
             $request->user()->tenant()->update($data);
 

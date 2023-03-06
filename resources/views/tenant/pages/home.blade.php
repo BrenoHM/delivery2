@@ -3,8 +3,14 @@
 @section('title', 'Home')
 
 @section('content')
-    <section class="banner d-flex align-items-center justify-content-center" style="background: url({{ asset('assets/images/banner.jpg') }})">
+    <section
+        class="banner d-flex align-items-center justify-content-center"
+        style="background: url(@if($tenant->banner) {{ $tenant->banner }} @else {{asset('assets/images/banner.jpg')}} @endif)"
+    >
         <div class="tenant-information">
+            @if ($tenant->logo)
+                <img src="{{ $tenant->logo }}" alt="Logomarca" width="150" class="mb-2" />
+            @endif
             <h1 class="text-center">{{$tenant->user->name}}</h1>
             <p class="text-center">
                 @if ( $tenant->street && $tenant->number && $tenant->neighborhood )

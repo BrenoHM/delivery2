@@ -52,7 +52,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         timeline: user.tenant?.timelines.length > 0 ? user.tenant?.timelines : "",
         type_pix_key: user.tenant?.type_pix_key ?? "",
         pix_key: user.tenant?.pix_key ?? "",
-        logo: ''
+        logo: '',
+        banner: ''
     });
 
     //before send data
@@ -370,6 +371,18 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                             />
 
                             <InputError className="mt-2" message={errors.logo} />
+                        </div>
+
+                        <div>
+                            <InputLabel forInput="banner" value="Banner" />
+
+                            <TextInput
+                                id="banner"
+                                type="file"
+                                handleChange={(e) => setData('banner', e.target.files[0])}
+                            />
+
+                            <InputError className="mt-2" message={errors.banner} />
                         </div>
                             
                     </>

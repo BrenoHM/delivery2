@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->id();
             $table->string('logo')->nullable();
+            $table->string('banner')->nullable();
             $table->string('domain')->nullable();
             $table->string('primaryColor')->nullable();
             $table->string('secondaryColor')->nullable();

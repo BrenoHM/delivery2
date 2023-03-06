@@ -22,6 +22,7 @@ class ProfileUpdateRequest extends FormRequest
             'primaryColor' => ['string', 'nullable'],
             'secondaryColor' => ['string', 'nullable'],
             'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ];
 
         if( $this->user()->role == 'client' ) {
