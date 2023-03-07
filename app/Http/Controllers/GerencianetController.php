@@ -128,4 +128,51 @@ class GerencianetController extends Controller
             print_r($e->getMessage());
         }
     }
+
+    public function getNotification()
+    {
+        $options = config('gerencianet');
+
+        //$token = $_POST["notification"];
+        $token = "869dfea5-313b-4793-96bc-9c6f15b13b83";
+ 
+        $params = [
+            'token' => $token
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $chargeNotification = $api->getNotification($params, []);
+            return $chargeNotification;
+            // Para identificar o status atual da sua transação você deverá contar o número de situações contidas no array, pois a última posição guarda sempre o último status. Veja na um modelo de respostas na seção "Exemplos de respostas" abaixo.
+          
+            // Veja abaixo como acessar o ID e a String referente ao último status da transação.
+                
+            // Conta o tamanho do array data (que armazena o resultado)
+            $i = count($chargeNotification["data"]);
+            // Pega o último Object chargeStatus
+            $ultimoStatus = $chargeNotification["data"][$i-1];
+            // Acessando o array Status
+            $status = $ultimoStatus["status"];
+            // Obtendo o ID da transação        
+            $charge_id = $ultimoStatus["identifiers"]["charge_id"];
+            // Obtendo a String do status atual
+            $statusAtual = $status["current"];  
+                
+            // Com estas informações, você poderá consultar sua base de dados e atualizar o status da transação especifica, uma vez que você possui o "charge_id" e a String do STATUS
+          
+            echo "O id da transação é: ".$charge_id." seu novo status é: ".$statusAtual;
+         
+            header("HTTP/1.1 200");
+            //print_r($chargeNotification);
+        } catch (GerencianetException $e) {
+            print_r($e->code);
+            print_r($e->error);
+            print_r($e->errorDescription);
+            header("HTTP/1.1 400");
+        } catch (Exception $e) {
+            print_r($e->getMessage());
+            header("HTTP/1.1 401");
+        }
+    }
 }

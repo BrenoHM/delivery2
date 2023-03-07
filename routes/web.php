@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     GerencianetController,
     OrderController
 };
+use App\Http\Controllers\Site\CheckoutController;
 use App\Http\Controllers\Site\HomeController;
 
 /*
@@ -29,7 +30,9 @@ use App\Http\Controllers\Site\HomeController;
 
 //Rotas dominio raiz
 Route::domain(env('APP_URL'))->group(function () {
+
     Route::get('/', [HomeController::class, 'index'])->name('site.index');
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('site.checkout');
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -104,6 +107,7 @@ Route::domain(env('APP_URL'))->group(function () {
 Route::get('tb', [ProductController::class, 'tb_variants']);
 Route::get('testGerencianetSubscriber', [GerencianetController::class, 'testGerencianetSubscriber']);
 Route::get('createOneStepBillet', [GerencianetController::class, 'createOneStepBillet']);
+Route::get('getNotification', [GerencianetController::class, 'getNotification']);
 
 //Rotas para tenants ficarão separadas
 Route::domain('{tenant}.' . env('APP_URL'))
