@@ -8,16 +8,11 @@
 
         <div class="card card-timeline px-2 border-none mb-3">
             <ul class="bs4-order-tracking"> 
-                {{-- <li class="step active"> <div><i class="fas fa-user"></i></div> Pedido Realizado <br> <small>24/02/2023 às 11:00</small> </li> 
-                <li class="step active"> <div><i class="fas fa-bread-slice"></i></div> Em preparação <br> <small>24/02/2023 às 11:00</small> </li> 
-                <li class="step"> <div><i class="fas fa-truck"></i></div> Saiu para entrega <br> <small>24/02/2023 às 11:00</small> </li> 
-                <li class="step "> <div><i class="fas fa-birthday-cake"></i></div> Entregue <br> <small>24/02/2023 às 11:00</small> </li>  --}}
                 @if ($canceled)
                     <li class="step {{ $status[0]['active'] ? 'active' : '' }}"> <div><i class="fas {{$status[0]['icon']}}"></i></div> {{ $status[0]['label'] }} <br> <small>{{ $status[0]['quando'] }}</small> </li> 
                     <li class="step active"> <div><i class="fas fa-bread-slice"></i></div> Cancelado <br> <small>{{ $canceled->created_at->format('d/m/y H:i:s') }}</small> </li> 
                     <li class="step"> <div><i class="fas fa-bread-slice"></i></div> Em preparação</li> 
                     <li class="step"> <div><i class="fas fa-person-running"></i></div> Saiu para entrega</li> 
-                    {{-- <li class="step"> <div><i class="fas fa-truck"></i></div> Entregue</li>  --}}
                 @else
                     @foreach ($status as $st)
                         <li class="step {{ $st['active'] ? 'active' : '' }}"> <div><i class="fas {{$st['icon']}}"></i></div> {{ $st['label'] }} <br> <small>{{ $st['quando'] }}</small> </li> 
@@ -25,7 +20,6 @@
                 @endif
                 
             </ul> 
-            {{-- <h5 class="text-center"><b>In transit</b>. The order has been shipped!</h5> --}}
         </div>
 
         <div class="row">
@@ -99,14 +93,10 @@
     </div>
 @endsection
 
-@section('load-js')
-    
-@endsection
-
-@section('js')
-    
+@section('js')    
     <script>
-
-       
+        window.setTimeout( function() {
+            window.location.reload();
+        }, 60000);
     </script>
 @endsection

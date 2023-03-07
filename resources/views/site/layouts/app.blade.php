@@ -6,7 +6,7 @@
 
         <title>{{ config('app.name', 'Delivery') }} | @yield('title') </title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/tenant/tenant.css') }}" >
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/site/site.css') }}" >
         
     </head>
     <body>
@@ -14,8 +14,21 @@
         <nav class="navbar fixed-top navbar-light bg-light">
             <div class="container d-flex">
                 <div>
-                    <a class="navbar-brand" href="/">{{Session::get('tenant')->user->name}}</a>
+                    <a class="navbar-brand" href="/">{{Session::get('tenant')->user->name ?? 'Site'}}</a>
                 </div>
+                {{-- @if (Route::has('login'))
+                    <div class="">
+                        @auth
+                            <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
+                        @else
+                            <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+                            @endif
+                        @endauth
+                    </div>
+                @endif --}}
                 <div>
                     @if (Cart::getTotalQuantity())
                         <a href="/checkout" class="btn btn-outline-dark">Finalizar compra</a>    

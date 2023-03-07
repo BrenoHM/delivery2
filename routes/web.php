@@ -30,12 +30,13 @@ use App\Http\Controllers\{
 //Rotas dominio raiz
 Route::domain(env('APP_URL'))->group(function () {
     Route::get('/', function () {
-        return Inertia::render('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
-        ]);
+        return view('site.pages.home', []);
+        // return Inertia::render('Welcome', [
+        //     'canLogin' => Route::has('login'),
+        //     'canRegister' => Route::has('register'),
+        //     'laravelVersion' => Application::VERSION,
+        //     'phpVersion' => PHP_VERSION,
+        // ]);
     });
 
     Route::middleware('auth')->group(function () {

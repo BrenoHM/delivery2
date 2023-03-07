@@ -1,0 +1,60 @@
+.banner {
+  background-color: #fff;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-bottom: 60px;
+  padding-top: 100px;
+  padding-bottom: 80px;
+}
+
+.feature-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 0.75rem;
+}
+
+.icon-link > .bi {
+  margin-top: 0.125rem;
+  margin-left: 0.125rem;
+  fill: currentcolor;
+  transition: transform 0.25s ease-in-out;
+}
+
+.icon-link:hover > .bi {
+  transform: translate(0.25rem);
+}
+
+.bi {
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
+
+.plans {
+  padding-bottom: 100px;
+}
+
+.depoiments .row {
+  margin-top: 50px;
+}
+
+.marketing {
+  padding-bottom: 100px;
+}
+
+.marketing .col-lg-4 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* rtl:begin:ignore */
+.marketing .col-lg-4 p {
+  margin-right: 0.75rem;
+  margin-left: 0.75rem;
+}
+
+footer {
+  background-color: white;
+  border-top: 1px solid #ccc;
+  padding: 10px 0 10px 0;
+}/*# sourceMappingURL=site.css.map */

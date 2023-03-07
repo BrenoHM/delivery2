@@ -15,6 +15,10 @@ export default function Index(props) {
     const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false);
     const [filterText, setFilterText] = useState('');
+    const [opened, setOpened] = useState(false);
+    const [call, setCall] = useState('');
+    const [firstFetchProducts, setFirstFetchProducts] = useState(false);
+    const [rowsExpandables, setRowsExpandables] = useState([]);
 
     const item = data.map((d, i) => {
         return { ...d, index: i };
@@ -43,12 +47,22 @@ export default function Index(props) {
 	}, [filterText]);
 
     useEffect(() => {
-        fetchOrders();
-        //consult orders per minutes
-        setInterval(function () {
+
+        if( !firstFetchProducts ) {
             fetchOrders();
-        }, 60000);
-	}, []);
+            setFirstFetchProducts(true);
+        }
+
+        //calls per minute
+        if (!opened) {
+            setCall(setInterval(function(){
+                fetchOrders()
+            }, 60000));
+        } else {
+            setCall(clearInterval(call));
+        }
+
+	}, [opened]);
 
     const columns = [
         {
@@ -88,6 +102,23 @@ export default function Index(props) {
         
     }
 
+    const handleExpandable = (toogled, row) => {
+        var rows = rowsExpandables;
+        if( toogled ){
+            setOpened(toogled);
+            rows.push(row);
+            setRowsExpandables(rows);
+        }else{
+            // Only perform calls automatically when all lines are closed
+            rows = rows.filter(r => r.index !== row.index)
+            if( rows.length == 0 ) {
+                setOpened(toogled);
+            }
+            setRowsExpandables(rows);
+        }
+        
+    }
+
     return (
         <ClientScreen {...props}>
             <Head title="Listagem de Produtos" />
@@ -103,6 +134,7 @@ export default function Index(props) {
                 subHeaderComponent={subHeaderComponentMemo}
                 progressComponent={<CustomLoader />}
                 expandableRows
+                onRowExpandToggled={handleExpandable}
                 expandableRowsComponent={({data}) => <OrderDetail data={data} index={data.index} handleChangeOrderStatus={changeStatus} />}
             />            
         </ClientScreen>
