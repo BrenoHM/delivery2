@@ -10,8 +10,10 @@ use App\Http\Controllers\{
     CategoryController,
     AdditionController,
     FreightController,
+    GerencianetController,
     OrderController
 };
+use App\Http\Controllers\Site\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,19 +27,9 @@ use App\Http\Controllers\{
 */
 
 
-
-
 //Rotas dominio raiz
 Route::domain(env('APP_URL'))->group(function () {
-    Route::get('/', function () {
-        return view('site.pages.home', []);
-        // return Inertia::render('Welcome', [
-        //     'canLogin' => Route::has('login'),
-        //     'canRegister' => Route::has('register'),
-        //     'laravelVersion' => Application::VERSION,
-        //     'phpVersion' => PHP_VERSION,
-        // ]);
-    });
+    Route::get('/', [HomeController::class, 'index'])->name('site.index');
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -110,6 +102,8 @@ Route::domain(env('APP_URL'))->group(function () {
 });
 
 Route::get('tb', [ProductController::class, 'tb_variants']);
+Route::get('testGerencianetSubscriber', [GerencianetController::class, 'testGerencianetSubscriber']);
+Route::get('createOneStepBillet', [GerencianetController::class, 'createOneStepBillet']);
 
 //Rotas para tenants ficarão separadas
 Route::domain('{tenant}.' . env('APP_URL'))

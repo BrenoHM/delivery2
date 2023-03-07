@@ -14,6 +14,10 @@ use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, 'index']);
 
+//test gerencianet
+Route::get('/gerencianet-plan', [HomeController::class, 'testGerencianetPLan']);
+Route::get('/gerencianet-subscriber', [HomeController::class, 'testGerencianetSubscriber']);
+
 //show product
 Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
 
