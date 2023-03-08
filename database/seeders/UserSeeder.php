@@ -18,10 +18,12 @@ class UserSeeder extends Seeder
     public function run()
     {
         Tenant::create([
+            'name' => 'Client',
             'domain' => 'client'
         ]);
 
         Tenant::create([
+            'name' => 'Client1',
             'domain' => 'client1'
         ]);
 

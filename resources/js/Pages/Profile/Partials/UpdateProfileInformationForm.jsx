@@ -59,7 +59,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     //before send data
     transform((data) => ({
         ...data,
-        domain: user.role == 'client' ? slugify(data.name) : '',
+        //domain: user.role == 'client' ? slugify(data.name) : '',
         zip_code: cepField,
         street: street,
         neighborhood: neighborhood,

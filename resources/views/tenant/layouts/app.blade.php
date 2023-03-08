@@ -14,7 +14,7 @@
         <nav class="navbar fixed-top navbar-light bg-light">
             <div class="container d-flex">
                 <div>
-                    <a class="navbar-brand" href="/">{{Session::get('tenant')->user->name}}</a>
+                    <a class="navbar-brand" href="/">{{Session::get('tenant')->name}}</a>
                 </div>
                 <div>
                     @if (Cart::getTotalQuantity())

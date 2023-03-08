@@ -11,7 +11,7 @@
             @if ($tenant->logo)
                 <img src="{{ $tenant->logo }}" alt="Logomarca" width="150" class="mb-2" />
             @endif
-            <h1 class="text-center">{{$tenant->user->name}}</h1>
+            <h1 class="text-center">{{$tenant->name}}</h1>
             <p class="text-center">
                 @if ( $tenant->street && $tenant->number && $tenant->neighborhood )
                     {{$tenant->street}}, {{$tenant->number}} - {{$tenant->neighborhood}}    
