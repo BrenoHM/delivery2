@@ -15,6 +15,7 @@ class Plan extends Model
         'plan_id',
         'interval',
         'repeats',
+        'trial_days'
     ];
 
     public function items(){

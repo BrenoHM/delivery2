@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('plan_id')->comment('Id do plano criado na gerencianet.');
             $table->tinyInteger('interval');
             $table->tinyInteger('repeats')->nullable();
+            $table->integer('trial_days')->nullable()->comment('Dias para periodo de testes minimo 1 maximo 365');
             $table->timestamps();
             $table->softDeletes();
         });

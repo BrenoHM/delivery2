@@ -8,10 +8,20 @@
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">Home page delivery</h1>
                 <p class="lead text-muted">Colocar no fundo algum banner.</p>
-                <p>
-                    <a href="#" class="btn btn-primary my-2">Experimente 30 dias grátis</a>
-                    {{-- <a href="#" class="btn btn-secondary my-2">Secondary action</a> --}}
-                </p>
+                @if (Cart::getTotalQuantity() == 0 && $plan_trial)
+                    <p>
+                        <form action="{{ route('site.checkout') }}" method="post">
+                            @csrf
+                            <button class="btn btn-primary my-2">Experimente {{ $plan_trial->trial_days }} dias grátis</button>
+                            <input type="hidden" name="plan_item_name" value="{{ $plan_trial->items[0]->name }}" />
+                            <input type="hidden" name="plan_item_price" value="{{ $plan_trial->items[0]->value / 100 }}" />
+                            <input type="hidden" name="id" value="{{ $plan_trial->id }}" />
+                            <input type="hidden" name="plan_id" value="{{ $plan_trial->plan_id }}" />
+                            <input type="hidden" name="plan_name" value="{{ $plan_trial->name }}" />
+                            <input type="hidden" name="trial_days" value="{{ $plan_trial->trial_days }}" />
+                        </form>
+                    </p>
+                @endif
             </div>
         </div>
     </section>

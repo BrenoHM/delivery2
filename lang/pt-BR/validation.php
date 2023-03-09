@@ -218,6 +218,11 @@ return [
         'birth' => 'nascimento',
         'tenant_name' => 'nome da sua loja',
         'zip_code' => 'cep',
+        'paymentMethod' => 'método de pagamento',
+        'cc-form' => 'nome no cartão',
+        'cc-number' => 'número do cartão',
+        'cc-expiration' => 'data expiração',
+        'cc-cvv' => 'cvv'
     ],
 
 ];

@@ -37,6 +37,7 @@ Route::domain(env('APP_URL'))->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'addCart'])->name('site.checkout');
     Route::delete('/checkout', [CheckoutController::class, 'removeCart'])->name('cart.delete');
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('site.checkout.process');
+    Route::get('/convert-slug', [CheckoutController::class, 'convertSlug'])->name('site.checkout.convert.slug');
     //rotas provisorias
     Route::get('session', function(){
         return Session::all();

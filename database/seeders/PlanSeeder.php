@@ -22,6 +22,7 @@ class PlanSeeder extends Seeder
                 'plan_id' => 10213,
                 'interval' => 1,
                 'repeats' => null,
+                'trial_days' => 30,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -30,6 +31,7 @@ class PlanSeeder extends Seeder
                 'plan_id' => 10214,
                 'interval' => 1,
                 'repeats' => null,
+                'trial_days' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -38,6 +40,7 @@ class PlanSeeder extends Seeder
                 'plan_id' => 10215,
                 'interval' => 1,
                 'repeats' => null,
+                'trial_days' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
