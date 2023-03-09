@@ -128,15 +128,25 @@
                         <div class="card-header py-3">
                             <h4 class="my-0 fw-normal">{{ $plan->name }}</h4>
                         </div>
-                        <div class="card-body">
-                            <h1 class="card-title pricing-card-title">R$ {{ number_format($plan->items[0]->value / 100, 2, ",", ".") }}<small class="text-muted fw-light">/mês</small></h1>
-                            <ul class="list-unstyled mt-3 mb-4">
-                                @foreach ($plan->items as $item)
-                                    <li>{{ $item->name }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Adquira já</button>
-                        </div>
+                        <form action="{{ route('site.checkout') }}" method="post">
+                            @csrf
+                            <div class="card-body">
+                                <h1 class="card-title pricing-card-title">R$ {{ number_format($plan->items[0]->value / 100, 2, ",", ".") }}<small class="text-muted fw-light">/mês</small></h1>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    @foreach ($plan->items as $item)
+                                        <li>{{ $item->name }}</li>
+                                        <input type="hidden" name="plan_item_name" value="{{ $item->name }}" />
+                                        <input type="hidden" name="plan_item_price" value="{{ $item->value / 100 }}" />
+                                    @endforeach
+                                </ul>
+                                @if (Cart::getTotalQuantity() == 0)
+                                    <button class="w-100 btn btn-lg btn-outline-primary">Adquira já</button>
+                                @endif
+                            </div>
+                            <input type="hidden" name="id" value="{{ $plan->id }}" />
+                            <input type="hidden" name="plan_id" value="{{ $plan->plan_id }}" />
+                            <input type="hidden" name="plan_name" value="{{ $plan->name }}" />
+                        </form>
                     </div>
                 </div>
             @endforeach

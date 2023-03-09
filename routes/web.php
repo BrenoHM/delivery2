@@ -15,6 +15,7 @@ use App\Http\Controllers\{
 };
 use App\Http\Controllers\Site\CheckoutController;
 use App\Http\Controllers\Site\HomeController;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,14 @@ use App\Http\Controllers\Site\HomeController;
 Route::domain(env('APP_URL'))->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('site.index');
-    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('site.checkout');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('site.checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'addCart'])->name('site.checkout');
+    Route::delete('/checkout', [CheckoutController::class, 'removeCart'])->name('cart.delete');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('site.checkout.process');
+    //rotas provisorias
+    Route::get('session', function(){
+        return Session::all();
+    });
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

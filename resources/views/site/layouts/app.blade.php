@@ -33,7 +33,7 @@
                     @if (Cart::getTotalQuantity())
                         <a href="/checkout" class="btn btn-outline-dark">Finalizar compra</a>    
                     @endif
-                    <a href="/cart" class="btn btn-outline-dark btn-cart-count"><i class="fa-solid fa-cart-shopping"></i> (<span>{{ Cart::getTotalQuantity() }}</span>)</a>
+                    <a href="/checkout" class="btn btn-outline-dark btn-cart-count"><i class="fa-solid fa-cart-shopping"></i> (<span>{{ Cart::getTotalQuantity() }}</span>)</a>
                 </div>
             </div>
         </nav>

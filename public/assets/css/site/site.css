@@ -67,6 +67,12 @@ footer {
   padding: 10px 0 10px 0;
 }
 
+.error-validate {
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545;
+}
+
 .loader {
   top: 0;
   right: 0;

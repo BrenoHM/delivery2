@@ -213,7 +213,11 @@ return [
         'addition' => 'acréscimo',
         'type_pix_key' => 'tipo chave',
         'pix_key' => 'valor chave',
-        'logo' => 'logomarca'
+        'logo' => 'logomarca',
+        'phone_number' => 'telefone',
+        'birth' => 'nascimento',
+        'tenant_name' => 'nome da sua loja',
+        'zip_code' => 'cep',
     ],
 
 ];
