@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Charge;
+use App\Models\Subscription;
+use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Gerencianet\Exception\GerencianetException;
 use Gerencianet\Gerencianet;
+use Illuminate\Support\Facades\Date;
 
 class CheckoutController extends Controller
 {
@@ -93,9 +98,8 @@ class CheckoutController extends Controller
 
         $request->validate($rules, $messages);
 
-        //dd($request->all());
-
         $cartItems = \Cart::getContent();
+
         $cart = collect($cartItems)->first();
 
         $options = config('gerencianet');
@@ -120,7 +124,7 @@ class CheckoutController extends Controller
             'cpf' => str_replace(['.', '-'], "", $request->cpf),
             'phone_number' => str_replace(['(', ')', ' ', '-'], "", $request->phone_number),
             'email' => $request->email,
-            'birth' => date('Y-m-d', strtotime($request->birth))
+            'birth' => DateTime::createFromFormat('d/m/Y', $request->birth)->format('Y-m-d')
         ];
 
         $billingAddress = [
@@ -167,7 +171,32 @@ class CheckoutController extends Controller
             $response = $api->createOneStepSubscription($params, $body);
 
             if( $response['code'] == 200 ) {
+
                 \Cart::clear();
+
+                $data = $response['data'];
+
+                //insert in subscription
+                Subscription::create([
+                    'subscription_id' => $data['subscription_id'],
+                    'plan_id' => $data['plan']['id'],
+                    'trial_days' => $data['trial_days'] ?? null,
+                    'custom_id' => null, //depois que inserir o tenant
+                    'first_execution' => DateTime::createFromFormat('d/m/Y', $data['first_execution'])->format('Y-m-d'),
+                    'total' => $data['total'],
+                    'payment' => $data['payment'],
+                    'status' => $data['status']
+                ]);
+
+                //insert in charges
+                Charge::create([
+                    'charge_id' => $data['charge']['id'],
+                    'custom_id' => null, //depois que inserir o tenant
+                    'subscription_id' => $data['subscription_id'],
+                    'parcel' => $data['charge']['parcel'],
+                    'status' => $data['charge']['status'],
+                    'total' => $data['charge']['total']
+                ]);
 
                 $message = 'Sua assinatura foi realizada com sucesso! Após aprovação do pagamento você receberá emails com as instruções de acesso!';
 

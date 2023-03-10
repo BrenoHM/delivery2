@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Charge;
 use Illuminate\Http\Request;
 use Exception;
 use Gerencianet\Exception\GerencianetException;
@@ -50,7 +51,11 @@ class NotificationController extends Controller
                 // Obtendo o ID da transação
                 $charge_id = $ultimoStatus["identifiers"]["charge_id"];
                 $result['charge_id'] = $charge_id;
-                // atualizar tabela charges
+
+                //update charge
+                Charge::where('charge_id', $charge_id)
+                        ->where('subscription_id', $result['subscription_id'])
+                        ->update(['status' => $statusAtual]);
             }
 
             return response()->json($result);

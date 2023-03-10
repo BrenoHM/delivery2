@@ -155,7 +155,7 @@ class GerencianetController extends Controller
             // Obtendo o ID da transação        
             $charge_id = $ultimoStatus["identifiers"]["charge_id"];
             // Obtendo a String do status atual
-            $statusAtual = $status["current"];  
+            $statusAtual = $status["current"];
                 
             // Com estas informações, você poderá consultar sua base de dados e atualizar o status da transação especifica, uma vez que você possui o "charge_id" e a String do STATUS
           
