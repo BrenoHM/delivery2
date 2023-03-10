@@ -14,7 +14,7 @@
                             @csrf
                             <button class="btn btn-primary my-2">Experimente {{ $plan_trial->trial_days }} dias grátis</button>
                             <input type="hidden" name="plan_item_name" value="{{ $plan_trial->items[0]->name }}" />
-                            <input type="hidden" name="plan_item_price" value="{{ $plan_trial->items[0]->value / 100 }}" />
+                            <input type="hidden" name="plan_item_price" value="{{ $plan_trial->items[0]->value }}" />
                             <input type="hidden" name="id" value="{{ $plan_trial->id }}" />
                             <input type="hidden" name="plan_id" value="{{ $plan_trial->plan_id }}" />
                             <input type="hidden" name="plan_name" value="{{ $plan_trial->name }}" />
@@ -146,7 +146,7 @@
                                     @foreach ($plan->items as $item)
                                         <li>{{ $item->name }}</li>
                                         <input type="hidden" name="plan_item_name" value="{{ $item->name }}" />
-                                        <input type="hidden" name="plan_item_price" value="{{ $item->value / 100 }}" />
+                                        <input type="hidden" name="plan_item_price" value="{{ $item->value }}" />
                                     @endforeach
                                 </ul>
                                 @if (Cart::getTotalQuantity() == 0)

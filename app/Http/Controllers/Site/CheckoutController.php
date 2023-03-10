@@ -106,11 +106,14 @@ class CheckoutController extends Controller
             [
                 'name' => $cart->attributes->plan_item_name,
                 'amount' => $cart->quantity,
-                'value' => 3000
+                'value' => $cart->price
             ]
         ];
 
-        $paymentToken = $request->payment_token;
+        $metadata = [
+            'custom_id' => "1010", //after id tenant created
+            'notification_url' => env('NOTIFICATION_URL')
+        ];
 
         $customer = [
             'name' => $request->name,
@@ -129,23 +132,33 @@ class CheckoutController extends Controller
             'state' => $request->state,
         ];
 
-        $metadata = [
-            'notification_url' => 'http://api.webhookinbox.com/i/n7UHEAIU/in/'
-        ];
-
-        $body = [
-            'items' => $items,
-            'payment' => [
+        if( $request->paymentMethod == 'credit' ) {
+            $paymentToken = $request->payment_token;
+            $payment = [
                 'credit_card' => [
                     'billing_address' => $billingAddress,
                     'payment_token' => $paymentToken,
                     'customer' => $customer
                 ]
-            ],
+            ];
+        }else{
+            //billet
+            $payment = [
+                "banking_billet" => [
+                    "expire_at" => "2024-12-10",
+                    "message" => "This is a space\n of up to 80 characters\n to tell\n your client something",
+                    "customer" => $customer
+                ]
+            ];
+        }
+
+        $body = [
+            'items' => $items,
+            'payment' => $payment,
             'metadata' => $metadata
         ];
 
-        if($request->trial_days) {
+        if($request->paymentMethod == 'credit' && $request->trial_days) {
             $body['payment']['credit_card']['trial_days'] = (int)$request->trial_days;
         }
 
@@ -153,13 +166,33 @@ class CheckoutController extends Controller
             $api = new Gerencianet($options);
             $response = $api->createOneStepSubscription($params, $body);
 
-            print_r("<pre>" . json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</pre>");
+            if( $response['code'] == 200 ) {
+                \Cart::clear();
+
+                $message = 'Sua assinatura foi realizada com sucesso! Após aprovação do pagamento você receberá emails com as instruções de acesso!';
+
+                if( $request->trial_days ){
+                    $message = 'Sua assinatura foi realizada com sucesso! Em bre você receberá emails com as instruções de acesso para teste!';
+                }
+
+                return redirect()->route('site.finished')->with([
+                    'message' => $message,
+                    'response' => $response
+                ]);
+            }
+
+            //print_r("<pre>" . json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</pre>");
         } catch (GerencianetException $e) {
-            print_r($e->code);
-            print_r($e->error);
-            print_r($e->errorDescription);
+
+            return redirect()->back()->withInput()->with(['error' => 'Houve um erro ao processar seu pagamento, favor entrar em contato com o administrador do sistema!']);
+            //depois salvar depois no log
+            // print_r($e->code);
+            // print_r($e->error);
+            // print_r($e->errorDescription);
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            return redirect()->back()->withInput()->with(['error' => 'Erro no servidor, favor entrar em contato com o administrador do sistema!']);
+            //depois salvar depois no log
+            //print_r($e->getMessage());
         }
         
     }

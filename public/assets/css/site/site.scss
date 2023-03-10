@@ -61,6 +61,14 @@
     }
 }
 
+.finished {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    &.container {
+        max-width: 960px;
+    }
+}
+
 footer {
     background-color: white;
     border-top: 1px solid #ccc;

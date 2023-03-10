@@ -102,7 +102,6 @@ class GerencianetController extends Controller
             "cpf" => "94271564656"
         ];
         
-        
         $body = [
             "items" => $items,
             "payment" => [
@@ -113,7 +112,6 @@ class GerencianetController extends Controller
                 ]
             ]
         ];
-        
         
         try {
             $api = new Gerencianet($options);
@@ -129,12 +127,12 @@ class GerencianetController extends Controller
         }
     }
 
-    public function getNotification()
+    public function getNotification($token)
     {
         $options = config('gerencianet');
 
         //$token = $_POST["notification"];
-        $token = "869dfea5-313b-4793-96bc-9c6f15b13b83";
+        $token = $token;
  
         $params = [
             'token' => $token

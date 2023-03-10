@@ -25,7 +25,7 @@
                           <small class="badge bg-success d-block mt-1">Período de teste</small>
                         @endif
                       </div>
-                      <span class="text-muted">R$ {{ number_format($item->price, 2, ",", ".") }}</span>
+                      <span class="text-muted">R$ {{ number_format($item->price / 100, 2, ",", ".") }}</span>
                       <form action="" method="post">
                         @csrf
                         @method('DELETE')
@@ -39,7 +39,7 @@
                 
                 <li class="list-group-item d-flex justify-content-between">
                   <span>Total (R$)</span>
-                  <strong>R$ {{ number_format($item->price ?? 0, 2, ",", ".") }}</strong>
+                  <strong>R$ {{ number_format(Cart::getTotal() ? (Cart::getTotal() / 100) : 0, 2, ",", ".") }}</strong>
                 </li>
                 @if ($trial)
                   <small class="text-muted">Só será cobrado após o período de {{ $trial->attributes->trial_days }} dias. O plano pode ser cancelado a qualquer momento</small>
@@ -49,6 +49,17 @@
 
             <div class="col-md-7 col-lg-8">
               <h4 class="mb-3">Dados do estabelecimento</h4>
+
+              @if (Session::has('message'))
+                  <div class="alert alert-success" role="alert">
+                      {{Session::get('message')}}
+                  </div>
+              @elseif (Session::has('error'))
+                  <div class="alert alert-danger" role="alert">
+                      {{Session::get('error')}}
+                  </div>
+              @endif
+              
               <form action="{{ route('site.checkout.process') }}" method="post" id="form">
                 @csrf
                 <div class="row g-3">
@@ -408,7 +419,7 @@
               if( form.valid() ) {
                 if( $("input[name='paymentMethod']:checked").val() == 'credit' ){
                   document.querySelector('.loader').style.display = 'flex';
-                  const cardNumber = $("#cc-number").val();
+                  const cardNumber = $("#cc-number").val().replace(/-/g,"");
                   const expiration = $("#cc-expiration").val().split('/');
 
                   checkout.getPaymentToken(

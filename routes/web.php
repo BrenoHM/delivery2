@@ -14,6 +14,7 @@ use App\Http\Controllers\{
     OrderController
 };
 use App\Http\Controllers\Site\CheckoutController;
+use App\Http\Controllers\Site\FinishedController;
 use App\Http\Controllers\Site\HomeController;
 use Illuminate\Support\Facades\Session;
 
@@ -38,6 +39,7 @@ Route::domain(env('APP_URL'))->group(function () {
     Route::delete('/checkout', [CheckoutController::class, 'removeCart'])->name('cart.delete');
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('site.checkout.process');
     Route::get('/convert-slug', [CheckoutController::class, 'convertSlug'])->name('site.checkout.convert.slug');
+    Route::get('/finished', [FinishedController::class, 'index'])->name('site.finished');
     //rotas provisorias
     Route::get('session', function(){
         return Session::all();
@@ -116,7 +118,7 @@ Route::domain(env('APP_URL'))->group(function () {
 Route::get('tb', [ProductController::class, 'tb_variants']);
 Route::get('testGerencianetSubscriber', [GerencianetController::class, 'testGerencianetSubscriber']);
 Route::get('createOneStepBillet', [GerencianetController::class, 'createOneStepBillet']);
-Route::get('getNotification', [GerencianetController::class, 'getNotification']);
+Route::get('getNotification/{token}', [GerencianetController::class, 'getNotification']);
 
 //Rotas para tenants ficarão separadas
 Route::domain('{tenant}.' . env('APP_URL'))
