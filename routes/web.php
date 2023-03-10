@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 use App\Http\Controllers\Auth\RedirectAuthenticatedUsersController;
 use App\Http\Controllers\{
     ProductController,
@@ -13,9 +11,12 @@ use App\Http\Controllers\{
     GerencianetController,
     OrderController
 };
-use App\Http\Controllers\Site\CheckoutController;
-use App\Http\Controllers\Site\FinishedController;
-use App\Http\Controllers\Site\HomeController;
+use App\Http\Controllers\Site\{
+    CheckoutController,
+    FinishedController,
+    HomeController,
+    NotificationController
+};
 use Illuminate\Support\Facades\Session;
 
 /*
@@ -40,6 +41,8 @@ Route::domain(env('APP_URL'))->group(function () {
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('site.checkout.process');
     Route::get('/convert-slug', [CheckoutController::class, 'convertSlug'])->name('site.checkout.convert.slug');
     Route::get('/finished', [FinishedController::class, 'index'])->name('site.finished');
+    Route::post('/notification', [NotificationController::class, 'receiveNotification'])->name('site.notification');
+
     //rotas provisorias
     Route::get('session', function(){
         return Session::all();
