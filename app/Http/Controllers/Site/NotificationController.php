@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use App\Models\Charge;
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Exception;
 use Gerencianet\Exception\GerencianetException;
@@ -56,6 +58,12 @@ class NotificationController extends Controller
                 Charge::where('charge_id', $charge_id)
                         ->where('subscription_id', $result['subscription_id'])
                         ->update(['status' => $statusAtual]);
+
+                if( $statusAtual == 'paid' ) {
+                    //habilit user e tenant
+                    User::where('tenant_id', $result['custom_id'])->restore();
+                    Tenant::where('id', $result['custom_id'])->restore();
+                }
             }
 
             return response()->json($result);

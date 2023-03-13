@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->enum('role', ['admin', 'user', 'client']);
             $table->string('email');
+            $table->date('birth')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

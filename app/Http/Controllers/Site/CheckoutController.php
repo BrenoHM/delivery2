@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Controller;
 use App\Models\Charge;
 use App\Models\Subscription;
+use App\Models\Tenant;
+use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 use Exception;
@@ -13,6 +15,8 @@ use Illuminate\Support\Str;
 use Gerencianet\Exception\GerencianetException;
 use Gerencianet\Gerencianet;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class CheckoutController extends Controller
 {
@@ -114,15 +118,45 @@ class CheckoutController extends Controller
             ]
         ];
 
+        $cpf = str_replace(['.', '-'], "", $request->cpf);
+        $phone_number = str_replace(['(', ')', ' ', '-'], "", $request->phone_number);
+
+        DB::beginTransaction();
+
+        //insert tenant
+        $tenant = Tenant::create([
+            'name' => $request->tenant_name,
+            'phone' => $phone_number,
+            'domain' => $request->domain,
+            'zip_code' => $request->zip_code,
+            'street' => $request->street,
+            'number' => $request->number,
+            'neighborhood' => $request->neighborhood,
+            'state' => $request->state,
+            'city' => $request->city,
+            'deleted_at' => Carbon::now()//tenant inactive before confirmation payment
+        ]);
+
+        //insert user
+        $user = User::create([
+            'name' => $request->name,
+            'role' => 'client',
+            'email' => $request->email,
+            'birth' => DateTime::createFromFormat('d/m/Y', $request->birth)->format('Y-m-d'),
+            'password' => Hash::make($cpf), //in first access password equal cpf
+            'tenant_id' => $tenant->id,
+            'deleted_at' => Carbon::now()//user inactive before confirmation payment
+        ]);
+
         $metadata = [
-            'custom_id' => "1010", //after id tenant created
+            'custom_id' => (string)$tenant->id, //after id tenant created
             'notification_url' => env('NOTIFICATION_URL')
         ];
 
         $customer = [
             'name' => $request->name,
-            'cpf' => str_replace(['.', '-'], "", $request->cpf),
-            'phone_number' => str_replace(['(', ')', ' ', '-'], "", $request->phone_number),
+            'cpf' => $cpf,
+            'phone_number' => $phone_number,
             'email' => $request->email,
             'birth' => DateTime::createFromFormat('d/m/Y', $request->birth)->format('Y-m-d')
         ];
@@ -181,7 +215,7 @@ class CheckoutController extends Controller
                     'subscription_id' => $data['subscription_id'],
                     'plan_id' => $data['plan']['id'],
                     'trial_days' => $data['trial_days'] ?? null,
-                    'custom_id' => null, //depois que inserir o tenant
+                    'custom_id' => $tenant->id,
                     'first_execution' => DateTime::createFromFormat('d/m/Y', $data['first_execution'])->format('Y-m-d'),
                     'total' => $data['total'],
                     'payment' => $data['payment'],
@@ -191,12 +225,14 @@ class CheckoutController extends Controller
                 //insert in charges
                 Charge::create([
                     'charge_id' => $data['charge']['id'],
-                    'custom_id' => null, //depois que inserir o tenant
+                    'custom_id' => $tenant->id,
                     'subscription_id' => $data['subscription_id'],
                     'parcel' => $data['charge']['parcel'],
                     'status' => $data['charge']['status'],
                     'total' => $data['charge']['total']
                 ]);
+
+                DB::commit();
 
                 $message = 'Sua assinatura foi realizada com sucesso! Após aprovação do pagamento você receberá emails com as instruções de acesso!';
 
@@ -213,14 +249,21 @@ class CheckoutController extends Controller
             //print_r("<pre>" . json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</pre>");
         } catch (GerencianetException $e) {
 
-            return redirect()->back()->withInput()->with(['error' => 'Houve um erro ao processar seu pagamento, favor entrar em contato com o administrador do sistema!']);
-            //depois salvar depois no log
             // print_r($e->code);
             // print_r($e->error);
             // print_r($e->errorDescription);
+            // return;
+            DB::rollBack();
+
+            return redirect()->back()->withInput()->with(['error' => 'Houve um erro ao processar seu pagamento, favor entrar em contato com o administrador do sistema!']);
+            //depois salvar no log
+            
         } catch (Exception $e) {
+
+            DB::rollBack();
+
             return redirect()->back()->withInput()->with(['error' => 'Erro no servidor, favor entrar em contato com o administrador do sistema!']);
-            //depois salvar depois no log
+            //depois salvar no log
             //print_r($e->getMessage());
         }
         

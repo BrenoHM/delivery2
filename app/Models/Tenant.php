@@ -23,7 +23,8 @@ class Tenant extends Model
         'state',
         'city',
         'type_pix_key',
-        'pix_key'
+        'pix_key',
+        'deleted_at'
     ];
 
     public function user()
