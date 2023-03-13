@@ -7,6 +7,7 @@ use App\Http\Controllers\{
     ProductController,
     CategoryController,
     AdditionController,
+    DashboardController,
     FreightController,
     GerencianetController,
     OrderController
@@ -67,7 +68,8 @@ Route::domain(env('APP_URL'))->group(function () {
         Route::group(['middleware' => 'checkRole:client'], function() {
             
             Route::prefix('client')->group(function () {
-                Route::inertia('/dashboard', 'Client/Dashboard')->name('clientDashboard');
+                //Route::inertia('/dashboard', 'Client/Dashboard')->name('clientDashboard');
+                Route::get('/dashboard', [DashboardController::class, 'client'])->name('clientDashboard');
 
                 Route::prefix('orders')->group(function () {
                     Route::get('/', [OrderController::class, 'index'])->name('order.index');

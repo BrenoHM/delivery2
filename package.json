@@ -21,6 +21,8 @@
     },
     "dependencies": {
         "cep-promise": "^4.3.0",
+        "chart.js": "^4.2.1",
+        "react-chartjs-2": "^5.2.0",
         "react-data-table-component": "^7.5.3",
         "react-icons": "^4.7.1",
         "react-input-mask": "^2.0.4",

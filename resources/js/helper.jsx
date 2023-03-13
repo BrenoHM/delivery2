@@ -68,3 +68,21 @@ export const dayOfWeek = [
   'Sexta',
   'Sábado'
 ]
+
+export const Data = [
+  {
+    id: 1,
+    month: "Janeiro",
+    value: 2000,
+  },
+  {
+    id: 2,
+    month: "Fevereiro",
+    value: 4000,
+  },
+  {
+    id: 3,
+    month: "Março",
+    value: 6000,
+  }
+];
