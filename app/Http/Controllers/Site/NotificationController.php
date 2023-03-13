@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Mail\FirstAccessEmail;
 use App\Models\Charge;
 use App\Models\Tenant;
 use App\Models\User;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Gerencianet\Exception\GerencianetException;
 use Gerencianet\Gerencianet;
+use Illuminate\Support\Facades\Mail;
 
 class NotificationController extends Controller
 {
@@ -59,11 +61,20 @@ class NotificationController extends Controller
                         ->where('subscription_id', $result['subscription_id'])
                         ->update(['status' => $statusAtual]);
 
-                if( $statusAtual == 'paid' ) {
+                //if( $statusAtual == 'paid' ) {
                     //habilit user e tenant
-                    User::where('tenant_id', $result['custom_id'])->restore();
+                    $user = User::where('tenant_id', $result['custom_id'])->first();
+                    $user->restore();
+                    //dd($user->tenant);
                     Tenant::where('id', $result['custom_id'])->restore();
-                }
+                //}
+
+                $data = [
+                    'name' => $user->name,
+                    'email' => $user->email
+                ];
+
+                Mail::to($user->email)->send(new FirstAccessEmail($data));
             }
 
             return response()->json($result);
