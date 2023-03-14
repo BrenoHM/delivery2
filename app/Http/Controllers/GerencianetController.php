@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plan;
+use App\Models\Subscription;
 use Exception;
 use Illuminate\Http\Request;
 use Gerencianet\Exception\GerencianetException;
@@ -172,5 +173,51 @@ class GerencianetController extends Controller
             print_r($e->getMessage());
             header("HTTP/1.1 401");
         }
+    }
+
+    public function cancelPlan(Request $request)
+    {
+        $options = config('gerencianet');
+
+        $response = [
+            'success' => false,
+            'message' => ""
+        ];
+
+        $params = [
+            "id" => $request->subscription_id
+        ];
+
+        try {
+            $api = new Gerencianet($options);
+            $response = $api->cancelSubscription($params);
+
+            if( $response["code"] == 200 ) {
+                $response['success'] = true;
+                $response['message'] = "Seu plano foi cancelado!";
+                Subscription::where('subscription_id', $request->subscription_id)->update(['status' => 'canceled']);
+            }
+
+            return response()->json($response);
+        
+            //print_r("<pre>" . json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</pre>");
+        } catch (GerencianetException $e) {
+
+            // print_r($e->code);
+            // print_r($e->error);
+            // print_r($e->errorDescription);
+            
+            $response['message'] = "Houve um erro ao cancelar seu plano, contacte o administrador do sistema!";
+            return response()->json($response);
+
+        } catch (Exception $e) {
+            
+            $response['message'] = "Erro no servidor, contacte o administrador do sistema!";
+            return response()->json($response);
+
+            //print_r($e->getMessage());
+        }
+
+        
     }
 }

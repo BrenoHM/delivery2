@@ -46,7 +46,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $with = ['tenant', 'tenant.timelines'];
+    protected $with = [
+        'tenant',
+        'tenant.timelines',
+        'tenant.subscription',
+        'tenant.subscription.plan'
+    ];
 
     public function tenant()
     {

@@ -36,4 +36,9 @@ class Tenant extends Model
     {
         return $this->hasMany(Timeline::class);
     }
+
+    public function subscription()
+    {
+        return $this->hasOne(Subscription::class, 'custom_id')->where('status', 'active');
+    }
 }

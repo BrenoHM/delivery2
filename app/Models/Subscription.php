@@ -19,4 +19,9 @@ class Subscription extends Model
         'payment',
         'status'
     ];
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, 'plan_id', 'plan_id');
+    }
 }

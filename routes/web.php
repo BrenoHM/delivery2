@@ -54,6 +54,9 @@ Route::domain(env('APP_URL'))->group(function () {
         Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+        //plans
+        Route::post('/plan/cancel', [GerencianetController::class, 'cancelPlan'])->name('plan.cancel');
+
         Route::inertia('/dashboard', 'Dashboard')->name('dashboard');
 
         Route::get("/redirectAuthenticatedUsers", [RedirectAuthenticatedUsersController::class, "home"]);
